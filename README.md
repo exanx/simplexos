@@ -1,98 +1,68 @@
-Simplex OS 🚀
+# Simplex OS 🚀
 
-![alt text](https://img.shields.io/badge/Live-Demo-brightgreen?style=for-the-badge&logo=rocket)
-
-
-![alt text](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)
+[![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen?style=for-the-badge&logo=rocket)](https://your-username.github.io/simplex-os/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 
 Simplex OS is a feature-rich, web-based desktop environment built entirely with vanilla HTML, CSS, and JavaScript. It's a playground for exploring UI/UX concepts, demonstrating the power of modern browser capabilities, and creating a persistent, customizable user experience without any backend or frameworks.
 
-![alt text](./screenshots/simplex_os_desktop.png)
+![Simplex OS Desktop Screenshot](./screenshots/simplex_os_desktop.png)
 
-✨ Key Features
+## ✨ Key Features
 
-Complete Window Management: Draggable, resizable, minimizable, and maximizable windows with active/inactive states.
+-   **Complete Window Management:** Draggable, resizable, minimizable, and maximizable windows with active/inactive states.
+-   **Persistent State:** Your settings, installed apps, notes, and desktop shortcuts are saved in `localStorage`, so your session is just as you left it.
+-   **Taskbar & Start Menu:** A fully functional taskbar with an app list, running window indicators, and a searchable Start Menu with both list and grid views.
+-   **Rich Theming & Personalization:**
+    -   Multiple built-in themes (Dark, Light, Hacker, etc.).
+    -   Customize desktop wallpapers (from a default list or your own images).
+    -   Use color pickers to change the accent colors of the Start button, icons, and active window borders.
+    -   Load your own custom CSS file for ultimate control.
+-   **Built-in Application Suite:**
+    -   **Productivity:** Notes, TextPad, Calculator, Clock (with Timer/Stopwatch).
+    -   **Creativity:** A robust Paint application with various brushes, shapes, and tools.
+    -   **Media:** Image Viewer with editing tools (crop, rotate, filters) and a Media Player for local audio/video and YouTube links.
+    -   **System:** Settings, App Installer, and a simple Browser.
+-   **Dynamic App Installation:** Install new, custom-built applications from a `.js` file or the official App Library without needing to refresh the page.
+-   **Desktop Experience:** Add and remove desktop shortcuts for your favorite apps, and place interactive widgets like a clock, to-do list, or image frame.
+-   **Lock Screen:** A demonstration of a secure lock screen and password setup flow (using a simple hash, for conceptual purposes).
 
-Persistent State: Your settings, installed apps, notes, and desktop shortcuts are saved in localStorage, so your session is just as you left it.
-
-Taskbar & Start Menu: A fully functional taskbar with an app list, running window indicators, and a searchable Start Menu with both list and grid views.
-
-Rich Theming & Personalization:
-
-Multiple built-in themes (Dark, Light, Hacker, etc.).
-
-Customize desktop wallpapers (from a default list or your own images).
-
-Use color pickers to change the accent colors of the Start button, icons, and active window borders.
-
-Load your own custom CSS file for ultimate control.
-
-Built-in Application Suite:
-
-Productivity: Notes, TextPad, Calculator, Clock (with Timer/Stopwatch).
-
-Creativity: A robust Paint application with various brushes, shapes, and tools.
-
-Media: Image Viewer with editing tools (crop, rotate, filters) and a Media Player for local audio/video and YouTube links.
-
-System: Settings, App Installer, and a simple Browser.
-
-Dynamic App Installation: Install new, custom-built applications from a .js file or the official App Library without needing to refresh the page.
-
-Desktop Experience: Add and remove desktop shortcuts for your favorite apps, and place interactive widgets like a clock, to-do list, or image frame.
-
-Lock Screen: A demonstration of a secure lock screen and password setup flow (using a simple hash, for conceptual purposes).
-
-🖥️ Live Demo
+## 🖥️ Live Demo
 
 Experience Simplex OS directly in your browser. No installation required!
 
-➡️ Try Simplex OS Now!
+### [**➡️ Try Simplex OS Now!**](https://your-username.github.io/simplex-os/)
 
-(Note: Replace your-username.github.io/simplex-os with your actual deployment link.)
+*(Note: Replace `your-username.github.io/simplex-os` with your actual deployment link.)*
 
-📸 Screenshots
-Deep Personalization in Settings	Searchable Start Menu (Grid View)
+## 📸 Screenshots
 
-![alt text](./screenshots/settings_app.png)
-	
-![alt text](./screenshots/start_menu_grid.png)
+| Deep Personalization in Settings                                                                 | Searchable Start Menu (Grid View)                                                                  |
+| ------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------- |
+| [![Settings App Screenshot](./screenshots/settings_app.png)](./screenshots/settings_app.png)     | [![Start Menu Grid View Screenshot](./screenshots/start_menu_grid.png)](./screenshots/start_menu_grid.png) |
+| **Feature-Rich Paint App**                                                                       | **Notes App with Rich Text**                                                                       |
+| [![Paint App Screenshot](./screenshots/paint_app.png)](./screenshots/paint_app.png)               | [![Notes App Screenshot](./screenshots/notes_app.png)](./screenshots/notes_app.png)                 |
+| **Hacker Theme**                                                                                 | **Interactive Desktop Widgets**                                                                    |
+| [![Hacker Theme Screenshot](./screenshots/hacker_theme.png)](./screenshots/hacker_theme.png) | [![Desktop Widgets Screenshot](./screenshots/desktop_widgets.png)](./screenshots/desktop_widgets.png) |
 
-Feature-Rich Paint App	Notes App with Rich Text
+*(You should create a `screenshots` folder in your repository and place your images there for these links to work.)*
 
-![alt text](./screenshots/paint_app.png)
-	
-![alt text](./screenshots/notes_app.png)
-
-Hacker Theme	Interactive Desktop Widgets
-
-![alt text](./screenshots/hacker_theme.png)
-	
-![alt text](./screenshots/desktop_widgets.png)
-
-(You should create a screenshots folder in your repository and place your images there for these links to work.)
-
-🚀 Getting Started
+## 🚀 Getting Started
 
 Interacting with Simplex OS is designed to be intuitive:
 
-Explore: Use the Start Menu to discover and launch built-in applications.
+1.  **Explore:** Use the **Start Menu** to discover and launch built-in applications.
+2.  **Organize:** Right-click on apps in the Start Menu to add shortcuts to your desktop.
+3.  **Multitask:** Drag windows by their title bars, resize from the corners, and use the taskbar to switch between open applications.
+4.  **Personalize:** Open the **Settings** app to change your wallpaper, theme, and accent colors.
+5.  **Expand:** Open the **App Installer** to add new applications from the App Library or your own `.js` files.
 
-Organize: Right-click on apps in the Start Menu to add shortcuts to your desktop.
-
-Multitask: Drag windows by their title bars, resize from the corners, and use the taskbar to switch between open applications.
-
-Personalize: Open the Settings app to change your wallpaper, theme, and accent colors.
-
-Expand: Open the App Installer to add new applications from the App Library or your own .js files.
-
-🛠️ Creating Your Own Apps
+## 🛠️ Creating Your Own Apps
 
 Simplex OS has a simple and powerful API for creating your own custom applications. All you need is a single JavaScript file.
 
-The core of any app is the simplexOS_AppConfig object, where you define its name, icon, and initialization logic.
+The core of any app is the `simplexOS_AppConfig` object, where you define its name, icon, and initialization logic.
 
-Generated javascript
+```javascript
 // MyAwesomeApp.js
 var simplexOS_AppConfig = {
   name: "My Awesome App",
@@ -168,3 +138,10 @@ Open a Pull Request
 📜 License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
+
+Generated code
+IGNORE_WHEN_COPYING_START
+content_copy
+download
+Use code with caution.
+IGNORE_WHEN_COPYING_END
