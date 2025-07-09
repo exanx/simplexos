@@ -1,9 +1,10 @@
 <script>
-    window.onload = () => {
-        currentURL = window.location.href;
-        lowerCaseURL = currentURL.toLowerCase();
-        if (currentURL != lowerCaseURL) {
-            location.replace(lowerCaseURL);
-        }
-    };
+  // Get the current path from the URL
+  const path = window.location.pathname.toLowerCase();
+
+  // Check if the path is "/simplexos"
+  if (path === "/simplexos" || path === "/simplexos/") {
+    // Redirect to the correct folder
+    window.location.href = "/SimplexOS/";
+  }
 </script>
