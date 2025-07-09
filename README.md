@@ -30,7 +30,7 @@ Simplex OS is a feature-rich, web-based desktop environment built entirely with 
 
 Experience Simplex OS directly in your browser. No installation required!
 
-### [**➡️ Try Simplex OS Now!**](https://exanx.github.io/SimplexOS/)
+### [**➡️ Try Simplex OS Now!**](https://exanx.github.io/simplexos/)
 
 ## 📸 Screenshots
 
