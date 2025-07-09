@@ -77,7 +77,7 @@ Read the Full App Development Guide »
 
 (This link assumes you host the app_development_guide.html file in your repository.)
 
-💻 Running Locally
+## 💻 Running Locally
 
 No complex build process is required to run Simplex OS locally.
 
@@ -106,17 +106,8 @@ IGNORE_WHEN_COPYING_END
 Open index.html:
 You can open the index.html file directly in your browser. For the best experience and to ensure all features (like the media player's visualizer) work correctly, it's recommended to use a local web server. A great tool for this is the Live Server extension for VS Code.
 
-💡 Future Goals
 
-A simple, abstracted "File System" for apps to read/write from.
-
-More interactive widgets (Weather, RSS Feed).
-
-System-wide keyboard shortcuts.
-
-Improved accessibility and touch-screen interactions.
-
-❤️ Contributing
+## ❤️ Contributing
 
 Contributions are welcome! Whether it's a bug fix, a new feature, a new theme, or a new built-in app, feel free to fork the repository and submit a pull request.
 
@@ -130,6 +121,6 @@ Push to the Branch (git push origin feature/AmazingFeature)
 
 Open a Pull Request
 
-📜 License
+## 📜 License
 
 This project is licensed under the MIT License - see the LICENSE file for details.```
