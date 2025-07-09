@@ -52,21 +52,23 @@ Experience Simplex OS directly in your browser. No installation required!
 (Note: Replace your-username.github.io/simplex-os with your actual deployment link.)
 
 📸 Screenshots
-<table>
-<tr>
-<td align="center"><a href="./screenshots/settings_app.png"><img src="./screenshots/settings_app.png" width="400px" alt="Screenshot of the Settings App in Simplex OS" /><br /><sub><b>Deep Personalization in Settings</b></sub></a></td>
-<td align="center"><a href="./screenshots/start_menu_grid.png"><img src="./screenshots/start_menu_grid.png" width="400px" alt="Screenshot of the Start Menu in Grid View" /><br /><sub><b>Searchable Start Menu (Grid View)</b></sub></a></td>
-</tr>
-<tr>
-<td align="center"><a href="./screenshots/paint_app.png"><img src="./screenshots/paint_app.png" width="400px" alt="Screenshot of the Paint App" /><br /><sub><b>Feature-Rich Paint App</b></sub></a></td>
-<td align="center"><a href="./screenshots/notes_app.png"><img src="./screenshots/notes_app.png" width="400px" alt="Screenshot of the Notes App" /><br /><sub><b>Notes App with Rich Text</b></sub></a></td>
-</tr>
-<tr>
-<td align="center"><a href="./screenshots/hacker_theme.png"><img src="./screenshots/hacker_theme.png" width="400px" alt="Screenshot of the Hacker Theme" /><br /><sub><b>Hacker Theme</b></sub></a></td>
-<td align="center"><a href="./screenshots/desktop_widgets.png"><img src="./screenshots/desktop_widgets.png" width="400px" alt="Screenshot of Desktop Widgets" /><br /><sub><b>Interactive Desktop Widgets</b></sub></a></td>
-</tr>
-</table>
+Deep Personalization in Settings	Searchable Start Menu (Grid View)
 
+![alt text](./screenshots/settings_app.png)
+	
+![alt text](./screenshots/start_menu_grid.png)
+
+Feature-Rich Paint App	Notes App with Rich Text
+
+![alt text](./screenshots/paint_app.png)
+	
+![alt text](./screenshots/notes_app.png)
+
+Hacker Theme	Interactive Desktop Widgets
+
+![alt text](./screenshots/hacker_theme.png)
+	
+![alt text](./screenshots/desktop_widgets.png)
 
 (You should create a screenshots folder in your repository and place your images there for these links to work.)
 
@@ -96,7 +98,7 @@ var simplexOS_AppConfig = {
   name: "My Awesome App",
   icon: '<i class="fa-solid fa-star"></i>',
   defaultSize: { width: 400, height: 250 },
-  
+
   init: function(contentEl, windowId) {
     // Your app's HTML and logic goes here
     contentEl.innerHTML = `<h3>Hello from ${this.name}!</h3>`;
