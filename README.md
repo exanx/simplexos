@@ -1,11 +1,11 @@
 # Simplex OS 🚀
 
-[![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen?style=for-the-badge&logo=rocket)](https://your-username.github.io/simplex-os/)
+[![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen?style=for-the-badge&logo=rocket)](https://exanx.github.io/SimplexOS/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 
 Simplex OS is a feature-rich, web-based desktop environment built entirely with vanilla HTML, CSS, and JavaScript. It's a playground for exploring UI/UX concepts, demonstrating the power of modern browser capabilities, and creating a persistent, customizable user experience without any backend or frameworks.
 
-![Simplex OS Desktop Screenshot](./screenshots/simplex_os_desktop.png)
+![Simplex OS Desktop Screenshot showing multiple apps open](https://raw.githubusercontent.com/exanx/SimplexOS/refs/heads/main/screenshots/Screenshot_9-7-2025_203957_exanx.github.io.jpeg)
 
 ## ✨ Key Features
 
@@ -30,21 +30,16 @@ Simplex OS is a feature-rich, web-based desktop environment built entirely with 
 
 Experience Simplex OS directly in your browser. No installation required!
 
-### [**➡️ Try Simplex OS Now!**](https://your-username.github.io/simplex-os/)
-
-*(Note: Replace `your-username.github.io/simplex-os` with your actual deployment link.)*
+### [**➡️ Try Simplex OS Now!**](https://exanx.github.io/SimplexOS/)
 
 ## 📸 Screenshots
 
-| Deep Personalization in Settings                                                                 | Searchable Start Menu (Grid View)                                                                  |
-| ------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------- |
-| [![Settings App Screenshot](./screenshots/settings_app.png)](./screenshots/settings_app.png)     | [![Start Menu Grid View Screenshot](./screenshots/start_menu_grid.png)](./screenshots/start_menu_grid.png) |
-| **Feature-Rich Paint App**                                                                       | **Notes App with Rich Text**                                                                       |
-| [![Paint App Screenshot](./screenshots/paint_app.png)](./screenshots/paint_app.png)               | [![Notes App Screenshot](./screenshots/notes_app.png)](./screenshots/notes_app.png)                 |
-| **Hacker Theme**                                                                                 | **Interactive Desktop Widgets**                                                                    |
-| [![Hacker Theme Screenshot](./screenshots/hacker_theme.png)](./screenshots/hacker_theme.png) | [![Desktop Widgets Screenshot](./screenshots/desktop_widgets.png)](./screenshots/desktop_widgets.png) |
+| Deep Personalization                                                                                                                               | Searchable Start Menu                                                                                                                            |
+| -------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| ![Settings App Screenshot](https://raw.githubusercontent.com/exanx/SimplexOS/refs/heads/main/screenshots/Screenshot_9-7-2025_204131_exanx.github.io.jpeg) | ![Start Menu Screenshot](https://raw.githubusercontent.com/exanx/SimplexOS/refs/heads/main/screenshots/Screenshot_9-7-2025_204615_exanx.github.io.jpeg)     |
+| **Custom Context Menus**                                                                                                                           | **Feature-Rich Apps**                                                                                                                            |
+| ![Context Menu Screenshot](https://raw.githubusercontent.com/exanx/SimplexOS/refs/heads/main/screenshots/Screenshot_9-7-2025_204057_exanx.github.io.jpeg)   | ![Paint App Screenshot](https://raw.githubusercontent.com/exanx/SimplexOS/refs/heads/main/screenshots/Screenshot_9-7-2025_204036_exanx.github.io.jpeg)          |
 
-*(You should create a `screenshots` folder in your repository and place your images there for these links to work.)*
 
 ## 🚀 Getting Started
 
@@ -80,7 +75,7 @@ For a complete walkthrough on building, styling, and adding functionality to you
 
 Read the Full App Development Guide »
 
-(This link assumes you host the HTML guide I wrote for you at this path.)
+(This link assumes you host the app_development_guide.html file in your repository.)
 
 💻 Running Locally
 
@@ -89,7 +84,7 @@ No complex build process is required to run Simplex OS locally.
 Clone the repository:
 
 Generated bash
-git clone https://github.com/your-username/simplex-os.git
+git clone https://github.com/exanx/SimplexOS.git
 IGNORE_WHEN_COPYING_START
 content_copy
 download
@@ -100,7 +95,7 @@ IGNORE_WHEN_COPYING_END
 Navigate to the directory:
 
 Generated bash
-cd simplex-os
+cd SimplexOS
 IGNORE_WHEN_COPYING_START
 content_copy
 download
@@ -137,11 +132,4 @@ Open a Pull Request
 
 📜 License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-Generated code
-IGNORE_WHEN_COPYING_START
-content_copy
-download
-Use code with caution.
-IGNORE_WHEN_COPYING_END
+This project is licensed under the MIT License - see the LICENSE file for details.```
