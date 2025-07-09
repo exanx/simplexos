@@ -1,0 +1,3290 @@
+/* --- CSS Variables (Dark Theme Only) --- */
+:root {
+    /* Default Gradient Colors */
+    --bg-desktop-color1-default: #0b132b;
+    --bg-desktop-color2-default: #1c2541;
+    /* Current Gradient (set by JS on load) */
+    --bg-desktop-gradient: linear-gradient(to bottom, var(--bg-desktop-color1-default), var(--bg-desktop-color2-default));
+    /* Current Background Image (set by JS) */
+    --bg-desktop-image: none; /* Initially no image */
+    /* Combined background */
+    --bg-desktop: var(--bg-desktop-image), var(--bg-desktop-gradient);
+
+    /* Theme mode (always dark) */
+    --theme-mode: 'dark';
+     /* Animation setting */
+    --animations-enabled: 1; /* 1 = enabled, 0 = disabled (controlled by JS adding class to body) */
+
+    /* --- Dark Theme Palette --- */
+    --bg-primary-dark: #2d2d2d; --bg-secondary-dark: #1e1e1e; --bg-tertiary-dark: #3a3a3a;
+    --text-primary-dark: #e0e0e0; --text-secondary-dark: #ffffff; --text-desktop-icons-dark: #ffffff; /* Default desktop icon color */
+    --accent-primary-dark: #0078d4; --accent-primary-hover-dark: #108ee9; /* Original default primary accent */
+    --accent-secondary-dark: #ff9800; --accent-secondary-hover-dark: #ffa726;
+    --accent-success-dark: #4caf50; --accent-success-hover-dark: #66bb6a;
+    --accent-danger-dark: #f44336; --accent-danger-hover-dark: #ef5350;
+    --border-primary-dark: #555555; --border-secondary-dark: #444444;
+    --window-active-border-color-default-dark: var(--accent-primary-dark); /* Default active window border for dark */
+    --shadow-primary-dark: rgba(0, 0, 0, 0.5); --shadow-desktop-icon-dark: rgba(0, 0, 0, 0.7);
+    --taskbar-bg-dark: #111111; --taskbar-button-bg-dark: #333333; --taskbar-button-hover-dark: #444444; --taskbar-button-active-bg-dark: #555555;
+    --start-button-bg-dark: var(--accent-primary-dark); --start-button-hover-bg-dark: var(--accent-primary-hover-dark); /* Start button default dark */
+    --start-menu-bg-dark: rgba(20, 20, 20, 0.97); --start-menu-header-dark: rgba(30, 30, 30, 0.9); --start-menu-hover-dark: var(--accent-primary-dark); /* Blue hover */ --start-menu-icon-color-dark: var(--text-secondary-dark); /* Default start menu icon dark */
+    --scrollbar-thumb-dark: #555; --scrollbar-track-dark: #333;
+    --uninstall-button-color-dark: #aaa; --uninstall-button-hover-bg-dark: var(--accent-danger-dark); --uninstall-button-hover-color-dark: #fff;
+    --add-shortcut-button-color-dark: #aaa; --add-shortcut-button-hover-bg-dark: var(--accent-success-dark); --add-shortcut-button-hover-color-dark: #fff;
+    --remove-shortcut-button-color-dark: #aaa; --remove-shortcut-button-hover-bg-dark: var(--accent-danger-dark); --remove-shortcut-button-hover-color-dark: #fff;
+    --resize-handle-color-dark: rgba(255, 255, 255, 0.15);
+    --start-menu-grid-item-bg-hover-dark: rgba(255, 255, 255, 0.1);
+
+
+    /* --- App Specific Dark Theme Variables --- */
+    /* Calculator */
+    --calc-bg-dark: #2a2a2a; --calc-display-bg-dark: var(--bg-primary-dark); --calc-display-text-dark: #ffffff; --calc-button-bg-dark: #4a4a4a; --calc-button-hover-bg-dark: #5f5f5f; --calc-button-active-bg-dark: #757575; --calc-button-text-dark: #ffffff; --calc-operator-bg-dark: var(--accent-primary-dark); --calc-operator-hover-bg-dark: var(--accent-primary-hover-dark); --calc-operator-text-dark: #ffffff; --calc-special-bg-dark: #6f6f6f; --calc-special-hover-bg-dark: #858585; --calc-special-text-dark: #ffffff;
+    /* Paint */
+    --paint-canvas-bg-dark: #ffffff; --paint-toolbar-bg-dark: var(--bg-tertiary-dark); --paint-toolbar-button-bg-dark: var(--bg-secondary-dark); --paint-toolbar-button-hover-dark: var(--border-primary-dark); --paint-toolbar-text-dark: var(--text-primary-dark); --paint-text-input-bg-dark: var(--bg-secondary-dark); --paint-text-input-text-dark: var(--text-primary-dark); --paint-fill-cursor-dark: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="%23e0e0e0"><path d="M19 11.5s-2 1.67-2 3.5c0 1.1.9 2 2 2s2-.9 2-2c0-1.83-2-3.5-2-3.5zm-11 3H3V6h10v3h1V4H2v16h6v-3h1v-2h1v-2h1v-1h1v-1h2v-1.17c-.31-.11-.6-.27-.87-.46C13.3 8.87 12 7.08 12 5c0-1.66 1.34-3 3-3s3 1.34 3 3c0 2.08-1.3 3.87-3.13 4.37a5.973 5.973 0 0 1 .87.46V11h2v1h-1v1h-1v1h-1v1h-1v2h-1v3h5v5H9.5z"/></svg>') 10 18, crosshair;
+    /* Image Viewer */
+    --image-viewer-bg-dark: var(--bg-secondary-dark); --image-viewer-img-bg-dark: #333; --image-viewer-toolbar-bg-dark: var(--bg-tertiary-dark); --image-viewer-button-bg-dark: var(--bg-secondary-dark); --image-viewer-button-hover-dark: var(--border-primary-dark); --image-viewer-text-dark: var(--text-primary-dark); --image-viewer-zoom-text-dark: #ccc;
+    /* Media Player */
+    --media-player-bg-dark: var(--bg-secondary-dark); --media-player-controls-bg-dark: var(--bg-tertiary-dark); --media-player-button-bg-dark: var(--bg-secondary-dark); --media-player-button-hover-dark: var(--border-primary-dark); --media-player-text-dark: var(--text-primary-dark); --media-player-placeholder-text-dark: #555; --media-player-video-bg-dark: #000;
+    /* Browser */
+    --browser-bg-dark: var(--bg-secondary-dark); --browser-toolbar-bg-dark: var(--bg-tertiary-dark); --browser-input-bg-dark: var(--bg-primary-dark); --browser-input-text-dark: var(--text-primary-dark); --browser-button-bg-dark: var(--bg-secondary-dark); --browser-button-hover-dark: var(--border-primary-dark); --browser-iframe-placeholder-bg-dark: var(--bg-tertiary-dark); --browser-iframe-placeholder-text-dark: var(--text-primary-dark);
+    /* Settings */
+    --settings-bg-dark: var(--bg-secondary-dark); --settings-section-bg-dark: var(--bg-primary-dark); --settings-label-dark: var(--text-primary-dark); --settings-button-bg-dark: var(--bg-tertiary-dark); --settings-button-hover-dark: var(--border-primary-dark); --settings-footer-text-dark: #aaa; --settings-wallpaper-thumb-border-dark: #444; --settings-wallpaper-thumb-active-border-dark: var(--accent-primary-dark); --settings-separator-color-dark: var(--border-secondary-dark);
+    /* Clock App */
+    --clock-app-tab-bg-dark: var(--bg-secondary-dark); --clock-app-tab-active-bg-dark: var(--bg-primary-dark); --clock-app-tab-border-dark: var(--border-primary-dark);
+    /* Notes App */
+    --notes-app-bg-dark: var(--bg-secondary-dark); --notes-app-sidebar-bg-dark: var(--bg-primary-dark); --notes-app-sidebar-border-dark: var(--border-primary-dark); --notes-app-list-item-hover-bg-dark: var(--bg-tertiary-dark); --notes-app-list-item-active-bg-dark: var(--accent-primary-dark); --notes-app-list-item-active-text-dark: #fff; --notes-app-editor-bg-dark: var(--bg-secondary-dark); --notes-app-toolbar-bg-dark: var(--bg-tertiary-dark); --notes-app-toolbar-button-bg-dark: var(--bg-secondary-dark); --notes-app-toolbar-button-hover-dark: var(--border-primary-dark); --notes-app-text-dark: var(--text-primary-dark); --notes-app-delete-button-hover-bg-dark: var(--accent-danger-dark); --notes-app-delete-button-hover-text-dark: #fff;
+    /* App Installer */
+    --app-installer-bg-dark: var(--app-installer-bg-dark); --app-installer-button-bg-dark: var(--settings-button-bg-dark); --app-installer-button-hover-dark: var(--settings-button-hover-dark); --app-installer-text-dark: var(--text-primary-dark); --app-installer-status-dark: var(--settings-footer-text-dark); --app-installer-list-bg-dark: var(--bg-primary-dark); --app-installer-list-border-dark: var(--border-secondary-dark); --app-installer-list-item-hover-dark: var(--bg-tertiary-dark); --app-installer-list-header-bg-dark: var(--bg-tertiary-dark);
+
+
+    /* --- Shared Variables (derived) --- */
+    --window-active-border-color-custom: initial; /* User-settable, initially unset */
+    --start-button-bg: var(--start-button-bg-dark);
+    --start-button-hover-bg: var(--start-button-hover-bg-dark);
+    --accent-primary: var(--start-button-bg);
+    --accent-primary-hover: var(--start-button-hover-bg);
+    --border-active: var(--window-active-border-color-custom, var(--window-active-border-color-default-dark));
+
+    /* --- General Variables (Assigned from Dark Theme) --- */
+    --bg-primary: var(--bg-primary-dark);
+    --bg-secondary: var(--bg-secondary-dark);
+    --bg-tertiary: var(--bg-tertiary-dark);
+    --text-primary: var(--text-primary-dark);
+    --text-secondary: var(--text-secondary-dark);
+    --text-desktop-icons: var(--text-desktop-icons-dark);
+    --accent-secondary: var(--accent-secondary-dark);
+    --accent-secondary-hover: var(--accent-secondary-hover-dark);
+    --accent-success: var(--accent-success-dark);
+    --accent-success-hover: var(--accent-success-hover-dark);
+    --accent-danger: var(--accent-danger-dark);
+    --accent-danger-hover: var(--accent-danger-hover-dark);
+    --border-primary: var(--border-primary-dark);
+    --border-secondary: var(--border-secondary-dark);
+    --shadow-primary: var(--shadow-primary-dark);
+    --shadow-desktop-icon: var(--shadow-desktop-icon-dark);
+    --taskbar-bg: var(--taskbar-bg-dark);
+    --taskbar-button-bg: var(--taskbar-button-bg-dark);
+    --taskbar-button-hover: var(--taskbar-button-hover-dark);
+    --taskbar-button-active-bg: var(--taskbar-button-active-bg-dark);
+    --start-menu-bg: var(--start-menu-bg-dark);
+    --start-menu-header: var(--start-menu-header-dark);
+    --start-menu-hover: var(--accent-primary); /* Uses derived accent */
+    --start-menu-icon-color: var(--start-menu-icon-color-dark);
+    --scrollbar-thumb: var(--scrollbar-thumb-dark);
+    --scrollbar-track: var(--scrollbar-track-dark);
+    --uninstall-button-color: var(--uninstall-button-color-dark);
+    --uninstall-button-hover-bg: var(--uninstall-button-hover-bg-dark);
+    --uninstall-button-hover-color: var(--uninstall-button-hover-color-dark);
+    --add-shortcut-button-color: var(--add-shortcut-button-color-dark);
+    --add-shortcut-button-hover-bg: var(--add-shortcut-button-hover-bg-dark);
+    --add-shortcut-button-hover-color: var(--add-shortcut-button-hover-color-dark);
+    --remove-shortcut-button-color: var(--remove-shortcut-button-color-dark);
+    --remove-shortcut-button-hover-bg: var(--remove-shortcut-button-hover-bg-dark);
+    --remove-shortcut-button-hover-color: var(--remove-shortcut-button-hover-color-dark);
+    --resize-handle-color: var(--resize-handle-color-dark);
+    --start-menu-grid-item-bg-hover: var(--start-menu-grid-item-bg-hover-dark);
+
+
+    /* --- App Specific General Variables (Assigned from Dark Theme) --- */
+    /* Calculator */
+    --calc-bg: var(--calc-bg-dark);
+    --calc-display-bg: var(--calc-display-bg-dark);
+    --calc-display-text: var(--calc-display-text-dark);
+    --calc-button-bg: var(--calc-button-bg-dark);
+    --calc-button-hover-bg: var(--calc-button-hover-bg-dark);
+    --calc-button-active-bg: var(--calc-button-active-bg-dark);
+    --calc-button-text: var(--calc-button-text-dark);
+    --calc-operator-bg: var(--accent-primary); /* Uses derived accent */
+    --calc-operator-hover-bg: var(--accent-primary-hover); /* Uses derived accent */
+    --calc-operator-text: var(--calc-operator-text-dark);
+    --calc-special-bg: var(--calc-special-bg-dark);
+    --calc-special-hover-bg: var(--calc-special-hover-bg-dark);
+    --calc-special-text: var(--calc-special-text-dark);
+    /* Paint */
+    --paint-canvas-bg: var(--paint-canvas-bg-dark);
+    --paint-toolbar-bg: var(--paint-toolbar-bg-dark);
+    --paint-toolbar-button-bg: var(--paint-toolbar-button-bg-dark);
+    --paint-toolbar-button-hover: var(--paint-toolbar-button-hover-dark);
+    --paint-toolbar-text: var(--paint-toolbar-text-dark);
+    --paint-text-input-bg: var(--paint-text-input-bg-dark);
+    --paint-text-input-text: var(--paint-text-input-text-dark);
+    --paint-fill-cursor: var(--paint-fill-cursor-dark);
+    /* Image Viewer */
+    --image-viewer-bg: var(--image-viewer-bg-dark);
+    --image-viewer-img-bg: var(--image-viewer-img-bg-dark);
+    --image-viewer-toolbar-bg: var(--image-viewer-toolbar-bg-dark);
+    --image-viewer-button-bg: var(--image-viewer-button-bg-dark);
+    --image-viewer-button-hover: var(--image-viewer-button-hover-dark);
+    --image-viewer-text: var(--image-viewer-text-dark);
+    --image-viewer-zoom-text: var(--image-viewer-zoom-text-dark);
+    /* Media Player */
+    --media-player-bg: var(--media-player-bg-dark);
+    --media-player-controls-bg: var(--media-player-controls-bg-dark);
+    --media-player-button-bg: var(--media-player-button-bg-dark);
+    --media-player-button-hover: var(--media-player-button-hover-dark);
+    --media-player-text: var(--media-player-text-dark);
+    --media-player-placeholder-text: var(--media-player-placeholder-text-dark);
+    --media-player-video-bg: var(--media-player-video-bg-dark);
+    /* Browser */
+    --browser-bg: var(--browser-bg-dark);
+    --browser-toolbar-bg: var(--browser-toolbar-bg-dark);
+    --browser-input-bg: var(--browser-input-bg-dark);
+    --browser-input-text: var(--browser-input-text-dark);
+    --browser-button-bg: var(--browser-button-bg-dark);
+    --browser-button-hover: var(--browser-button-hover-dark);
+    --browser-iframe-placeholder-bg: var(--browser-iframe-placeholder-bg-dark);
+    --browser-iframe-placeholder-text: var(--browser-iframe-placeholder-text-dark);
+    /* Settings */
+    --settings-bg: var(--bg-secondary-dark);
+    --settings-section-bg: var(--bg-primary-dark);
+    --settings-label: var(--text-primary-dark);
+    --settings-button-bg: var(--bg-tertiary-dark);
+    --settings-button-hover: var(--border-primary-dark);
+    --settings-footer-text: #aaa;
+    --settings-wallpaper-thumb-border: #444;
+    --settings-wallpaper-thumb-active-border: var(--accent-primary-dark);
+    --settings-separator-color: var(--border-secondary-dark);
+    /* Clock App */
+    --clock-app-tab-bg: var(--bg-secondary-dark);
+    --clock-app-tab-active-bg: var(--bg-primary-dark);
+    --clock-app-tab-border: var(--border-primary-dark);
+    /* Notes App */
+    --notes-app-bg: var(--notes-app-bg-dark);
+    --notes-app-sidebar-bg: var(--notes-app-sidebar-bg-dark);
+    --notes-app-sidebar-border: var(--notes-app-sidebar-border-dark);
+    --notes-app-list-item-hover-bg: var(--notes-app-list-item-hover-bg-dark);
+    --notes-app-list-item-active-bg: var(--accent-primary); /* Uses derived accent */
+    --notes-app-list-item-active-text: var(--notes-app-list-item-active-text-dark);
+    --notes-app-editor-bg: var(--notes-app-editor-bg-dark);
+    --notes-app-toolbar-bg: var(--notes-app-toolbar-bg-dark);
+    --notes-app-toolbar-button-bg: var(--notes-app-toolbar-button-bg-dark);
+    --notes-app-toolbar-button-hover: var(--notes-app-toolbar-button-hover-dark);
+    --notes-app-text: var(--notes-app-text-dark);
+    --notes-app-delete-button-hover-bg: var(--notes-app-delete-button-hover-bg-dark);
+    --notes-app-delete-button-hover-text: var(--notes-app-delete-button-hover-text-dark);
+    /* App Installer */
+    --app-installer-bg: var(--app-installer-bg-dark);
+    --app-installer-button-bg: var(--settings-button-bg-dark);
+    --app-installer-button-hover: var(--settings-button-hover-dark);
+    --app-installer-text: var(--app-installer-text-dark);
+    --app-installer-status: var(--settings-footer-text-dark);
+    --app-installer-list-bg: var(--app-installer-list-bg-dark);
+    --app-installer-list-border: var(--border-secondary-dark);
+    --app-installer-list-item-hover: var(--app-installer-list-item-hover-dark);
+    --app-installer-list-header-bg: var(--app-installer-list-header-bg-dark);
+}
+
+/* ========================================================================== */
+/* --- GENERAL STYLES --- */
+/* ========================================================================== */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+html, body {
+    height: 100%;
+    overflow: hidden;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+}
+
+/* Scrollbar Styles */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+::-webkit-scrollbar-track {
+    background: var(--scrollbar-track);
+}
+::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb);
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #555; /* Slightly darker for hover */
+}
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
+
+/* Font Awesome Icon Alignment in Buttons */
+button i.fa-solid,
+button i.fa-regular,
+a.button-like i.fa-solid,
+a.button-like i.fa-regular {
+    line-height: inherit;
+    vertical-align: middle;
+    margin-right: 4px;
+}
+button i.fa-solid:only-child,
+button i.fa-regular:only-child,
+a.button-like i.fa-solid:only-child,
+a.button-like i.fa-regular:only-child {
+    margin-right: 0; /* No margin if icon only */
+}
+
+/* Font Awesome Icon Styling for App Icons */
+.icon i.fa-solid,
+.icon i.fa-regular {
+    font-size: inherit;
+    line-height: 1;
+    vertical-align: middle;
+}
+
+/* Toolbar Separator */
+.toolbar .separator {
+    width: 1px;
+    height: 20px;
+    background-color: var(--border-primary);
+    margin: 0 5px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+/* ========================================================================== */
+/* --- DESKTOP --- */
+/* ========================================================================== */
+#desktop {
+    position: relative;
+    height: calc(100vh - 40px);
+    background: var(--bg-desktop);
+    background-size: cover;
+    background-position: center center;
+    overflow: hidden;
+    padding: 15px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 80px);
+    grid-template-rows: repeat(auto-fill, 90px);
+    grid-auto-flow: row; /* Default, can be changed to 'column' by JS */
+    grid-gap: 10px;
+    align-content: start;
+}
+
+.desktop-icon {
+    position: relative;
+    z-index: 1;
+    color: var(--text-desktop-icons);
+    text-shadow: 1px 1px 2px var(--shadow-desktop-icon);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 80px;
+    height: 90px;
+    padding: 5px;
+    cursor: pointer;
+    text-align: center;
+    border-radius: 3px;
+    transition: background-color 0.1s ease, opacity 0.3s ease-out, transform 0.3s ease-out, visibility 0s 0.3s; /* Added transitions for visibility */
+    overflow: hidden;
+}
+.desktop-icon:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+.desktop-icon .icon {
+    font-size: 32px;
+    margin-bottom: 5px;
+    line-height: 1;
+    height: 32px;
+    width: 32px; /* Ensure icon container size */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    pointer-events: none; /* Important for double click on parent */
+}
+.desktop-icon .icon img {
+    max-width: 32px;
+    max-height: 32px;
+}
+.desktop-icon span:last-child { /* Icon Name */
+    font-size: 0.85em;
+    word-wrap: break-word;
+    max-height: 2.6em; /* approx 2 lines */
+    line-height: 1.3em;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+/* Desktop Icon Visibility (JS toggles .icons-hidden on #desktop) */
+#desktop.icons-hidden .desktop-icon {
+    opacity: 0;
+    transform: scale(0.8);
+    pointer-events: none;
+    visibility: hidden;
+}
+body.animations-disabled #desktop.icons-hidden .desktop-icon {
+    display: none; /* Fallback for no animations */
+}
+
+
+/* ========================================================================== */
+/* --- TASKBAR --- */
+/* ========================================================================== */
+#taskbar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 40px; /* Default height */
+    background-color: var(--taskbar-bg);
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    padding: 0 5px;
+    z-index: 1000;
+    border-top: 1px solid var(--border-primary);
+    transition: height 0.2s ease-out; /* For scrollbar adjustment */
+}
+
+/* Start Button */
+#start-button {
+    background-color: var(--start-button-bg);
+    color: var(--text-secondary);
+    border: none;
+    padding: 5px 10px;
+    margin-right: 10px;
+    cursor: pointer;
+    height: 30px;
+    border-radius: 3px;
+    transition: background-color 0.2s ease;
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+#start-button:hover {
+    background-color: var(--start-button-hover-bg);
+}
+#start-button i {
+    margin-right: 2px;
+    font-size: 1em;
+}
+
+/* Taskbar App Buttons Area */
+#taskbar-apps {
+    display: flex;
+    height: 100%;
+    flex-grow: 1;
+    overflow-x: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-thumb) var(--taskbar-bg);
+    align-items: center; /* Default alignment */
+}
+#taskbar-apps::-webkit-scrollbar {
+    height: 4px; /* Default scrollbar height */
+}
+#taskbar-apps::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb);
+}
+#taskbar-apps::-webkit-scrollbar-track {
+    background: var(--taskbar-bg);
+}
+
+/* Individual Taskbar App Button */
+.taskbar-app-button {
+    background-color: var(--taskbar-button-bg);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-primary);
+    padding: 0 10px;
+    margin: 0 2px;
+    cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 150px;
+    min-width: 50px;
+    display: flex;
+    align-items: center;
+    font-size: 0.9em;
+    border-radius: 3px;
+    transition: background-color 0.1s ease, opacity 0.2s ease, border-bottom-color 0.1s ease;
+    border-bottom-width: 3px;
+    border-bottom-style: solid;
+    border-bottom-color: transparent;
+    height: 30px;
+    flex-shrink: 0;
+}
+.taskbar-app-button .icon {
+    margin-right: 5px;
+    font-size: 1.1em;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    width: 16px;
+    height: 16px;
+}
+.taskbar-app-button .icon img {
+    max-width: 16px;
+    max-height: 16px;
+    vertical-align: middle;
+}
+.taskbar-app-button .taskbar-app-name {
+    flex-grow: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.taskbar-app-button:hover {
+    background-color: var(--taskbar-button-hover);
+}
+.taskbar-app-button.active {
+    background-color: var(--taskbar-button-active-bg);
+    border-bottom-color: var(--accent-primary);
+}
+.taskbar-app-button.minimized {
+    opacity: 0.7;
+    border-bottom-color: var(--border-secondary);
+    background-color: var(--taskbar-button-bg);
+}
+.taskbar-app-button.minimized.active { /* When minimized but still the "focused" one if restored */
+    opacity: 0.9;
+    border-bottom-color: var(--accent-primary);
+    background-color: var(--taskbar-button-active-bg);
+}
+
+/* System Tray Area */
+#system-tray {
+    margin-left: auto; /* Pushes to the right */
+    padding-right: 10px;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    flex-shrink: 0;
+}
+#clock {
+    font-size: 0.9em;
+    text-align: right;
+    line-height: 1.2;
+    cursor: pointer;
+    padding: 2px 5px;
+    border-radius: 2px;
+    transition: background-color 0.1s ease;
+}
+#clock:hover {
+    background-color: var(--taskbar-button-hover);
+}
+
+/* Taskbar Height Adjustment for Scrollbar */
+#taskbar.has-scrollbar {
+    height: 50px; /* Increased height */
+    padding-bottom: 2px; /* Small padding at bottom of taskbar itself */
+}
+#taskbar.has-scrollbar #taskbar-apps {
+    align-items: flex-start; /* Align items to top to make space for scrollbar */
+    padding-top: 2px; /* Small padding at top of app button area */
+    height: calc(100% - 2px); /* Adjust height of app button area */
+}
+#taskbar.has-scrollbar #taskbar-apps::-webkit-scrollbar {
+    height: 6px; /* Slightly thicker scrollbar when visible */
+}
+#taskbar.has-scrollbar #start-button,
+#taskbar.has-scrollbar .taskbar-app-button,
+#taskbar.has-scrollbar #system-tray {
+     margin-top: 3px; /* Push items down slightly to center in taller bar */
+}
+
+/* Taskbar Clock Popup */
+#taskbar-clock-popup {
+    position: fixed;
+    display: none;
+    width: 220px;
+    background-color: var(--start-menu-bg);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-primary);
+    border-radius: 5px;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.3);
+    padding: 15px;
+    z-index: 1002;
+    font-size: 0.95em;
+    text-align: center;
+    bottom: 45px; /* Above taskbar */
+    right: 5px;
+}
+#taskbar-clock-popup .popup-time {
+    font-size: 1.8em;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: var(--accent-primary);
+}
+#taskbar-clock-popup .popup-date {
+    font-size: 1.0em;
+    color: var(--text-primary);
+}
+
+/* ========================================================================== */
+/* --- START MENU --- */
+/* ========================================================================== */
+#start-menu {
+    position: fixed;
+    bottom: 40px; /* Above taskbar */
+    left: 0;
+    width: 280px;
+    max-height: 450px;
+    background-color: var(--start-menu-bg);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-primary);
+    border-bottom: none;
+    z-index: 1001;
+    display: flex;
+    flex-direction: column;
+    border-radius: 5px 5px 0 0;
+    overflow: hidden;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.2);
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+body:not(.animations-disabled) #start-menu {
+    transition: opacity 0.2s ease-out, transform 0.2s ease-out;
+}
+#start-menu.hidden {
+    opacity: 0;
+    transform: translateY(20px);
+    pointer-events: none;
+}
+
+/* --- NEW: Start Menu Search Bar --- */
+#start-menu-search-bar {
+    position: relative;
+    padding: 8px;
+    background-color: var(--start-menu-header);
+    border-bottom: 1px solid var(--border-primary);
+}
+#start-menu-search-bar .fa-search {
+    position: absolute;
+    left: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-primary);
+    opacity: 0.6;
+}
+#start-menu-search-bar input {
+    width: 100%;
+    padding: 8px 10px 8px 30px;
+    border-radius: 4px;
+    border: 1px solid var(--border-secondary);
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    outline: none;
+}
+#start-menu-search-bar input:focus {
+    border-color: var(--accent-primary);
+}
+#start-menu-search-bar input::-webkit-search-cancel-button {
+    -webkit-appearance: none; /* Hide the 'x' button */
+}
+
+
+/* Start Menu Header */
+#start-menu-header {
+    padding: 10px 15px;
+    font-weight: bold;
+    background-color: var(--start-menu-header);
+    flex-shrink: 0;
+}
+
+/* App List (Common for List & Grid) */
+#app-list {
+    list-style: none;
+    padding: 5px 0;
+    overflow-y: auto;
+    flex-grow: 1;
+}
+
+/* List View Specifics */
+#start-menu:not(.grid-view) #app-list li {
+    padding: 8px 10px 8px 15px;
+    cursor: default;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    transition: background-color 0.1s ease;
+}
+#start-menu:not(.grid-view) #app-list li:hover {
+    background-color: var(--start-menu-hover);
+}
+#start-menu:not(.grid-view) #app-list li .app-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-grow: 1;
+    overflow: hidden; /* For text-overflow */
+    cursor: pointer;
+}
+#start-menu:not(.grid-view) #app-list li .app-info .icon {
+    font-size: 1.1em;
+    flex-shrink: 0;
+    width: 1.2em;
+    height: 1.2em;
+    text-align: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+#start-menu:not(.grid-view) #app-list li .app-info .icon img {
+    max-width: 1.1em;
+    max-height: 1.1em;
+    vertical-align: middle;
+}
+#start-menu:not(.grid-view) #app-list li .app-info .icon i {
+    font-size: inherit;
+    line-height: 1;
+    vertical-align: middle;
+    color: var(--start-menu-icon-color);
+}
+#start-menu:not(.grid-view) #app-list li .app-info .app-name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+#start-menu:not(.grid-view) #app-list li .app-actions {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    gap: 4px;
+    opacity: 0; /* Hidden by default, shown on hover */
+    transition: opacity 0.1s ease;
+}
+#start-menu:not(.grid-view) #app-list li:hover .app-actions {
+    opacity: 1;
+}
+#start-menu:not(.grid-view) #app-list li .app-actions button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.1em;
+    padding: 2px 5px;
+    margin-left: 5px;
+    line-height: 1;
+    border-radius: 3px;
+    flex-shrink: 0;
+    transition: background-color 0.1s ease, color 0.1s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+#start-menu:not(.grid-view) #app-list li .uninstall-button { color: var(--uninstall-button-color); }
+#start-menu:not(.grid-view) #app-list li .add-shortcut-button { color: var(--add-shortcut-button-color); }
+#start-menu:not(.grid-view) #app-list li .remove-shortcut-button { color: var(--remove-shortcut-button-color); }
+
+#start-menu:not(.grid-view) #app-list li .uninstall-button:hover { background-color: var(--uninstall-button-hover-bg); color: var(--uninstall-button-hover-color); }
+#start-menu:not(.grid-view) #app-list li .add-shortcut-button:hover { background-color: var(--add-shortcut-button-hover-bg); color: var(--add-shortcut-button-hover-color); }
+#start-menu:not(.grid-view) #app-list li .remove-shortcut-button:hover { background-color: var(--remove-shortcut-button-hover-bg); color: var(--remove-shortcut-button-hover-color); }
+#start-menu:not(.grid-view) #app-list li .app-actions button i { margin-right: 0; font-size: 0.9em; }
+
+
+/* Grid View Specifics */
+#start-menu.grid-view #app-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(75px, 1fr));
+    gap: 10px;
+    padding: 10px;
+    justify-content: start; /* Aligns grid items to the start if not filling the row */
+}
+#start-menu.grid-view #app-list li {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+    padding: 8px 5px;
+    width: 75px;
+    height: 90px;
+    text-align: center;
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden; /* Ensure app actions don't spill */
+}
+#start-menu.grid-view #app-list li:hover {
+    background-color: var(--start-menu-grid-item-bg-hover);
+}
+#start-menu.grid-view #app-list li .app-info {
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 4px;
+    height: calc(100% - 10px); /* Make space for actions if they were at bottom */
+    width: 100%;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+}
+#start-menu.grid-view #app-list li .app-info .icon {
+    font-size: 28px;
+    width: 32px;
+    height: 32px;
+    margin-bottom: 2px; /* Space between icon and name */
+}
+#start-menu.grid-view #app-list li .app-info .icon img {
+    max-width: 32px;
+    max-height: 32px;
+}
+#start-menu.grid-view #app-list li .app-info .icon i {
+    font-size: inherit; /* Take size from parent .icon */
+    line-height: 1;
+    color: var(--start-menu-icon-color);
+}
+#start-menu.grid-view #app-list li .app-info .app-name {
+    font-size: 0.75em;
+    white-space: normal; /* Allow wrapping */
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Limit to 2 lines */
+    -webkit-box-orient: vertical;
+    line-height: 1.25;
+    max-height: 2.5em; /* 2 * 1.25em */
+    width: 100%;
+    word-break: break-word;
+    text-overflow: ellipsis; /* Fallback, though -webkit-line-clamp is better */
+}
+#start-menu.grid-view #app-list li .app-actions {
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    background-color: rgba(0, 0, 0, 0.3); /* Semi-transparent background for actions */
+    border-radius: 3px;
+    padding: 1px 2px;
+    gap: 2px;
+    opacity: 0; /* Hidden by default, show on li:hover */
+    transition: opacity 0.1s ease-in-out;
+}
+#start-menu.grid-view #app-list li:hover .app-actions {
+    opacity: 1;
+}
+#start-menu.grid-view #app-list li .app-actions button {
+    font-size: 0.9em;
+    padding: 1px 3px;
+    margin-left: 0;
+    color: #eee; /* Lighter color for better visibility on dark overlay */
+    background: none;
+}
+#start-menu.grid-view #app-list li .app-actions button i { margin-right: 0; font-size: 0.8em; }
+#start-menu.grid-view #app-list li .app-actions button:hover {
+    background-color: rgba(255, 255, 255, 0.2); /* Subtle hover for action buttons */
+}
+#start-menu.grid-view #app-list li .uninstall-button:hover { background-color: var(--uninstall-button-hover-bg); color: var(--uninstall-button-hover-color); }
+#start-menu.grid-view #app-list li .add-shortcut-button:hover { background-color: var(--add-shortcut-button-hover-bg); color: var(--add-shortcut-button-hover-color); }
+#start-menu.grid-view #app-list li .remove-shortcut-button:hover { background-color: var(--remove-shortcut-button-hover-bg); color: var(--remove-shortcut-button-hover-color); }
+
+
+/* ========================================================================== */
+/* --- WINDOWS --- */
+/* ========================================================================== */
+.window {
+    position: absolute;
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-primary);
+    box-shadow: 3px 3px 10px var(--shadow-primary);
+    min-width: 200px;
+    min-height: 150px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Important for content and resize */
+    resize: both; /* Allows user resizing */
+    border-radius: 5px;
+    z-index: 10; /* Default z-index */
+    color: var(--text-primary);
+    opacity: 1;
+    transform: scale(1);
+}
+body:not(.animations-disabled) .window {
+    transition: opacity 0.15s ease-out, transform 0.15s ease-out;
+}
+.window.dragging,
+.window.resizing {
+    transition: none !important; /* Disable transitions during drag/resize */
+    user-select: none;
+}
+
+/* Top-left resize handle pseudo-element */
+.window:not(.maximized)::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 8px; /* Size of the visual handle */
+    height: 8px;
+    background-color: var(--resize-handle-color);
+    pointer-events: none; /* Let events pass through to window for JS detection */
+    z-index: 1; /* Above title bar content but below window controls if overlapping */
+    border-radius: 5px 0 0 0; /* Match window corner */
+}
+
+/* Active Window Styling */
+.window.active {
+    border-color: var(--border-active);
+    z-index: 999 !important; /* Ensure active window is on top */
+    box-shadow: 5px 5px 15px var(--shadow-primary); /* Slightly more prominent shadow */
+}
+
+/* Window Title Bar */
+.window .title-bar {
+    background-color: var(--bg-tertiary);
+    border-bottom: 1px solid var(--border-primary);
+    padding: 5px 8px;
+    cursor: grab;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 30px;
+    flex-shrink: 0; /* Prevent title bar from shrinking */
+    user-select: none; /* Prevent text selection */
+    color: var(--text-primary);
+    border-radius: 5px 5px 0 0; /* Match window top corners */
+}
+.window.active .title-bar {
+    background-color: var(--border-active); /* Use active border color for title bar */
+    color: var(--text-secondary); /* Contrasting text for active title bar */
+    border-bottom-color: var(--border-active); /* Match border */
+}
+.window .title-bar:active { /* When dragging */
+    cursor: grabbing;
+}
+.window .title-bar .title {
+    font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-right: 10px; /* Space before controls */
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.window .title-bar .title .icon {
+    font-size: 1em;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+}
+.window .title-bar .title .icon img {
+    max-width: 16px;
+    max-height: 16px;
+    vertical-align: middle;
+}
+.window .title-bar .title .icon i {
+    font-size: inherit;
+}
+
+/* Window Controls (Minimize, Maximize, Close) */
+.window .title-bar .window-controls {
+    display: flex;
+    align-items: center;
+}
+.window .title-bar .window-controls button {
+    background: none;
+    border: none;
+    color: inherit; /* Inherit color from title bar */
+    cursor: pointer;
+    font-size: 14px; /* Icon font size */
+    font-weight: normal;
+    padding: 0 8px; /* Clickable area */
+    margin-left: 2px;
+    line-height: 20px; /* Align icons vertically */
+    height: 20px;
+    min-width: 25px;
+    border-radius: 3px;
+    transition: background-color 0.1s ease, color 0.1s ease;
+    display: flex; /* For centering icon inside */
+    justify-content: center;
+    align-items: center;
+}
+.window .title-bar .window-controls button i {
+    font-size: 12px; /* Actual icon size */
+    margin: 0;
+    line-height: 1;
+}
+.window .title-bar .window-controls button:hover {
+    background-color: rgba(0,0,0,0.1); /* Subtle hover for inactive window */
+}
+.window.active .title-bar .window-controls button:hover {
+    background-color: rgba(255,255,255,0.2); /* Subtle hover for active window */
+}
+.window .title-bar .window-controls button.close-button:hover {
+    background-color: var(--accent-danger);
+    color: var(--text-secondary); /* Ensure contrast on danger bg */
+}
+.window .title-bar .window-controls .minimize-button i {
+    transform: translateY(-1px); /* Slight visual adjustment for minimize icon */
+}
+
+/* Window Content Area */
+.window .window-content {
+    padding: 10px;
+    flex-grow: 1; /* Allow content to fill available space */
+    overflow: auto; /* Enable scrolling for content */
+    background-color: var(--bg-secondary);
+    display: flex; /* Allows content to control its layout (e.g. column) */
+    flex-direction: column;
+}
+
+/* Window States: Maximized & Minimized */
+.window.maximized {
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: calc(100vh - 40px) !important; /* Full height minus taskbar */
+    resize: none !important;
+    border-radius: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+    transform: none; /* Reset any transform */
+    opacity: 1;
+    pointer-events: auto;
+    z-index: 990 !important; /* Below active, above others */
+}
+body:not(.animations-disabled) .window.maximized {
+    transition: top 0.15s ease-out, left 0.15s ease-out, width 0.15s ease-out, height 0.15s ease-out, border-radius 0.1s ease-out;
+}
+.window.maximized.active { /* Active maximized window */
+    z-index: 999 !important;
+}
+.window.maximized .title-bar {
+    border-radius: 0;
+    cursor: default !important; /* No dragging when maximized */
+}
+
+.window.minimized {
+    opacity: 0;
+    transform: translateY(50px) scale(0.8);
+    pointer-events: none; /* Not interactive when minimized */
+}
+body:not(.animations-disabled) .window.minimized {
+    transition: opacity 0.2s ease-out, transform 0.2s ease-out;
+}
+
+/* ========================================================================== */
+/* --- CALCULATOR APP --- */
+/* ========================================================================== */
+.calculator-app {
+    background-color: var(--calc-bg);
+    padding: 15px;
+    border-radius: 0 0 5px 5px; /* Match window bottom corners if window has no padding */
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.calculator {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: auto repeat(5, 1fr); /* Display row + 5 button rows */
+    gap: 10px;
+    width: 100%;
+    max-width: 280px; /* Max width for calculator UI */
+    height: 100%;
+}
+.calculator .display {
+    grid-column: 1 / -1; /* Span all 4 columns */
+    background-color: var(--calc-display-bg);
+    color: var(--calc-display-text);
+    padding: 15px 10px;
+    text-align: right;
+    font-size: 2.2em;
+    font-weight: 300;
+    border: none;
+    margin-bottom: 10px; /* Space between display and buttons */
+    min-height: 60px;
+    overflow: hidden;
+    word-wrap: break-word;
+    border-radius: 4px;
+    line-height: 1.2;
+    position: relative; /* For pending operator */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.calculator .display .main-display {
+    flex-grow: 1;
+}
+.calculator .display .pending-operator {
+    position: absolute;
+    top: 5px;
+    left: 10px;
+    font-size: 0.5em;
+    color: var(--accent-secondary);
+    opacity: 0.8;
+}
+.calculator button {
+    padding: 0; /* Remove default padding */
+    height: 100%; /* Fill grid cell height */
+    font-size: 1.3em;
+    cursor: pointer;
+    border: none;
+    background-color: var(--calc-button-bg);
+    color: var(--calc-button-text);
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.1s ease, filter 0.1s ease;
+}
+.calculator button:hover {
+    background-color: var(--calc-button-hover-bg);
+}
+.calculator button:active {
+    background-color: var(--calc-button-active-bg);
+    filter: brightness(0.9);
+}
+.calculator button[data-value="0"] { /* Zero button spans 2 columns */
+    grid-column: 1 / 3;
+    border-radius: 8px; /* Ensure radius is consistent */
+}
+.calculator button.operator {
+    background-color: var(--calc-operator-bg);
+    color: var(--calc-operator-text);
+    font-size: 1.5em;
+}
+.calculator button.operator:hover {
+    background-color: var(--calc-operator-hover-bg);
+}
+.calculator button.operator.active { /* Visually indicate active operator */
+    background-color: var(--calc-button-text); /* Invert colors */
+    color: var(--calc-operator-bg);
+}
+.calculator button.special { /* AC, +/-, % */
+    background-color: var(--calc-special-bg);
+    color: var(--calc-special-text);
+}
+.calculator button.special:hover {
+    background-color: var(--calc-special-hover-bg);
+}
+
+/* ========================================================================== */
+/* --- TEXTPAD APP --- */
+/* ========================================================================== */
+.textpad-app {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+.textpad-toolbar {
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    background-color: var(--paint-toolbar-bg); /* Reusing paint variable for consistency */
+    border-bottom: 1px solid var(--border-primary);
+    flex-shrink: 0;
+    gap: 8px;
+    flex-wrap: wrap; /* Allow controls to wrap on small window */
+}
+.textpad-toolbar button {
+    background-color: var(--paint-toolbar-button-bg);
+    color: var(--paint-toolbar-text);
+    border: 1px solid var(--border-primary);
+    padding: 3px 8px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: background-color 0.1s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+.textpad-toolbar button i {
+    font-size: 0.9em;
+    margin: 0;
+}
+.textpad-toolbar button:hover {
+    background-color: var(--paint-toolbar-button-hover);
+}
+.textpad-toolbar .font-size-controls {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-left: auto; /* Push to the right */
+}
+.textpad-toolbar .font-size-controls span {
+    font-size: 0.9em;
+}
+.textpad-toolbar .font-size-controls button i {
+    font-size: 0.8em;
+}
+.textpad-content {
+    flex-grow: 1;
+    display: flex; /* Ensure textarea fills */
+}
+.textpad-content textarea {
+    width: 100%;
+    height: 100%;
+    border: none;
+    resize: none;
+    font-family: monospace;
+    font-size: 1em; /* Default, JS can change this */
+    outline: none;
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    padding: 5px;
+}
+
+/* ========================================================================== */
+/* --- PAINT APP --- */
+/* ========================================================================== */
+.paint-app {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-color: var(--bg-primary); /* Fallback if canvas fails */
+    position: relative; /* For canvas positioning */
+}
+.paint-app .toolbar {
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    background-color: var(--paint-toolbar-bg);
+    border-bottom: 1px solid var(--border-primary);
+    flex-wrap: wrap; /* Allow tools to wrap */
+    gap: 8px; /* Consistent gap for wrapped items */
+    flex-shrink: 0;
+    color: var(--paint-toolbar-text);
+}
+.paint-app .toolbar label {
+    margin: 0 2px 0 5px;
+    font-size: 0.9em;
+}
+/* Tool buttons and checkbox labels that act like buttons */
+.paint-app .toolbar button.tool,
+.paint-app .toolbar input[type="checkbox"] + label {
+    min-width: 30px; /* Ensure consistent button size for icons */
+    padding: 4px 6px;
+    font-size: 1.1em; /* For larger icons */
+    justify-content: center;
+}
+.paint-app .toolbar button,
+.paint-app .toolbar input[type="checkbox"] + label {
+    padding: 4px 8px;
+    cursor: pointer;
+    border: 1px solid var(--border-primary);
+    background-color: var(--paint-toolbar-button-bg);
+    color: var(--paint-toolbar-text);
+    border-radius: 3px;
+    transition: background-color 0.1s ease;
+    font-size: 0.9em; /* For text buttons */
+    line-height: 1;
+    vertical-align: middle;
+    margin-right: 5px; /* Default spacing */
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+.paint-app .toolbar button i,
+.paint-app .toolbar label i {
+    font-size: 1em; /* Icon size relative to button font-size */
+    margin: 0;
+}
+.paint-app .toolbar button:hover,
+.paint-app .toolbar input[type="checkbox"] + label:hover {
+    background-color: var(--paint-toolbar-button-hover);
+}
+.paint-app .toolbar button.active, /* For active tool */
+.paint-app .toolbar input[type="checkbox"]:checked + label { /* For active checkbox toggle */
+    background-color: var(--accent-primary);
+    border-color: var(--accent-primary-hover);
+    color: var(--text-secondary);
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
+}
+.paint-app .toolbar input[type="color"] {
+    width: 30px;
+    height: 25px;
+    padding: 0;
+    border: 1px solid var(--border-primary);
+    cursor: pointer;
+    vertical-align: middle;
+    background-color: var(--bg-secondary); /* Background for the picker itself */
+}
+.paint-app .toolbar input[type="color"]::-webkit-color-swatch-wrapper { padding: 1px; }
+.paint-app .toolbar input[type="color"]::-webkit-color-swatch { border: none; border-radius: 2px; }
+.paint-app .toolbar input[type="color"]::-moz-color-swatch { border: none; border-radius: 2px; }
+
+.paint-app .toolbar input[type="range"] {
+    width: 80px;
+    vertical-align: middle;
+    cursor: pointer;
+}
+.paint-app .toolbar .size-indicator {
+    font-size: 0.9em;
+    min-width: 20px;
+    text-align: right;
+    margin-right: 5px;
+    display: inline-block;
+    vertical-align: middle;
+}
+.paint-app .toolbar #clear-canvas-button {
+    background-color: var(--accent-danger);
+    color: var(--text-secondary);
+}
+.paint-app .toolbar #clear-canvas-button:hover {
+    background-color: var(--accent-danger-hover);
+}
+.paint-app .toolbar #save-paint-button {
+    background-color: var(--accent-success);
+    color: var(--text-secondary);
+}
+.paint-app .toolbar #save-paint-button:hover {
+    background-color: var(--accent-success-hover);
+}
+.paint-app .toolbar .tool-options { /* e.g., for Text tool */
+    display: none; /* Hidden by default */
+    align-items: center;
+    gap: 5px;
+    margin-left: 5px;
+    vertical-align: middle;
+}
+.paint-app .toolbar .tool-options.visible {
+    display: inline-flex; /* Shown by JS */
+}
+.paint-app .toolbar input[type="text"] { /* Text input within tool options */
+    padding: 3px 5px;
+    background-color: var(--paint-text-input-bg);
+    color: var(--paint-text-input-text);
+    border: 1px solid var(--border-secondary);
+    border-radius: 3px;
+    width: 100px;
+    font-size: 0.9em;
+}
+.paint-app .toolbar input[type="checkbox"] { /* Hide actual checkbox, use label for styling */
+    display: none;
+}
+.paint-app .canvas-container {
+    position: relative;
+    flex-grow: 1;
+    overflow: hidden; /* Important for canvas resizing */
+}
+.paint-app .paint-canvas,
+.paint-app .paint-overlay-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block; /* Removes extra space below canvas */
+    width: 100%; /* Will be set by JS to container size */
+    height: 100%;
+}
+.paint-app .paint-canvas {
+    background-color: var(--paint-canvas-bg);
+    cursor: crosshair; /* Default cursor */
+    z-index: 1;
+}
+.paint-app .paint-overlay-canvas { /* For drawing previews (shapes, text) */
+    pointer-events: none; /* Overlay should not capture mouse events */
+    z-index: 2;
+}
+.paint-app .paint-canvas.text-cursor { cursor: text; }
+.paint-app .paint-canvas.shape-cursor { cursor: crosshair; } /* Or other shape-specific cursor */
+.paint-app .paint-canvas.fill-cursor { cursor: var(--paint-fill-cursor, crosshair); }
+
+
+/* ========================================================================== */
+/* --- IMAGE VIEWER APP --- */
+/* ========================================================================== */
+.image-viewer-app {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-color: var(--image-viewer-bg);
+    color: var(--image-viewer-text);
+    overflow: hidden;
+}
+
+/* Toolbars */
+.image-viewer-app .iv-toolbar {
+    display: flex;
+    align-items: center;
+    padding: 4px 8px;
+    background-color: var(--image-viewer-toolbar-bg);
+    border-bottom: 1px solid var(--border-primary);
+    flex-shrink: 0;
+    gap: 4px;
+    flex-wrap: wrap; /* Allow toolbars to wrap on small windows */
+}
+
+/* General Toolbar Button Style */
+.image-viewer-app .iv-toolbar button {
+    background-color: var(--image-viewer-button-bg);
+    color: var(--image-viewer-text);
+    border: 1px solid var(--border-primary);
+    padding: 3px 8px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: background-color 0.1s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    min-width: 30px; /* For icon-only buttons */
+}
+.image-viewer-app .iv-toolbar button i { font-size: 0.9em; margin: 0; }
+.image-viewer-app .iv-toolbar button:hover:not(:disabled) { background-color: var(--image-viewer-button-hover); }
+.image-viewer-app .iv-toolbar button:disabled { opacity: 0.5; cursor: not-allowed; }
+.image-viewer-app .iv-toolbar button.active { background-color: var(--accent-primary); color: var(--text-secondary); }
+
+/* --- Unique Button Styles --- */
+.image-viewer-app .iv-toolbar button[id^="iv-save-"] {
+    background-color: var(--accent-success);
+    color: var(--text-secondary);
+}
+.image-viewer-app .iv-toolbar button[id^="iv-save-"]:hover:not(:disabled) {
+    background-color: var(--accent-success-hover);
+}
+
+.image-viewer-app .iv-toolbar button[data-tool="reset"] {
+    background-color: var(--accent-danger);
+    color: var(--text-secondary);
+}
+.image-viewer-app .iv-toolbar button[data-tool="reset"]:hover:not(:disabled) {
+    background-color: var(--accent-danger-hover);
+}
+
+/* Contextual Toolbar (e.g., for Crop Apply/Cancel) */
+.image-viewer-app .iv-contextual-toolbar button { flex-grow: 1; }
+.image-viewer-app .iv-contextual-toolbar button:first-child {
+    background-color: var(--accent-success);
+    color: var(--text-secondary);
+}
+.image-viewer-app .iv-contextual-toolbar button:first-child:hover:not(:disabled) {
+    background-color: var(--accent-success-hover);
+}
+/*----------------------------*/
+
+/* Edit Controls Toolbar (not used by name, but could be) */
+.image-viewer-app .iv-edit-controls {
+    display: none; /* Hidden by default, shown when an image is loaded */
+    align-items: center;
+    gap: 15px; /* More space between control groups */
+}
+.image-viewer-app .iv-edit-controls .iv-control-group {
+    display: contents; /* Use flexbox on parent toolbar instead */
+}
+
+/* Filter Controls (Sliders) */
+.image-viewer-app .iv-filter-controls {
+    display: none; /* Hidden by default */
+    flex-direction: column;
+    gap: 8px;
+    padding: 8px;
+    border-bottom: 1px solid var(--border-primary);
+    background-color: var(--bg-primary);
+}
+.image-viewer-app .iv-filter-controls .filter-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9em;
+}
+.image-viewer-app .iv-filter-controls .filter-item label { min-width: 80px; text-align: right; }
+.image-viewer-app .iv-filter-controls .filter-item input[type="range"] { flex-grow: 1; margin: 0; }
+.image-viewer-app .iv-filter-controls .filter-item .filter-value { min-width: 40px; text-align: left; font-family: monospace; }
+
+/* Content Area */
+.image-viewer-app .iv-content-area {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    background-color: var(--image-viewer-img-bg);
+    position: relative;
+    cursor: grab; /* For panning */
+}
+.image-viewer-app .iv-content-area .iv-canvas,
+.image-viewer-app .iv-content-area .iv-crop-overlay-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform-origin: 0 0;
+    display: none; /* Toggled by JS */
+    image-rendering: -webkit-optimize-contrast; /* Better for pixel art on downscale */
+    image-rendering: crisp-edges;
+}
+.image-viewer-app .iv-content-area .iv-crop-overlay-canvas {
+    z-index: 10;
+    pointer-events: none; /* Mouse events should pass through to main canvas */
+}
+.image-viewer-app .iv-content-area .placeholder {
+    color: var(--settings-footer-text); /* Reusing for consistency */
+    font-style: italic;
+}
+
+
+/* ========================================================================== */
+/* --- MEDIA PLAYER APP --- */
+/* ========================================================================== */
+.media-player-app {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-color: var(--media-player-bg);
+    overflow: hidden;
+    color: var(--media-player-text);
+}
+.media-player-app .media-controls { /* Top bar for Open, filename */
+    display: flex;
+    align-items: center;
+    padding: 5px 8px;
+    background-color: var(--media-player-controls-bg);
+    border-bottom: 1px solid var(--border-primary);
+    flex-shrink: 0;
+    gap: 10px;
+}
+.media-player-app .media-controls button {
+    background-color: var(--media-player-button-bg);
+    color: var(--media-player-text);
+    border: 1px solid var(--border-primary);
+    padding: 3px 8px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: background-color 0.1s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+.media-player-app .media-controls button i { font-size: 0.9em; margin: 0; }
+.media-player-app .media-controls button:hover {
+    background-color: var(--media-player-button-hover);
+}
+.media-player-app .media-controls .file-info {
+    font-size: 0.85em;
+    color: var(--text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex-grow: 1;
+    text-align: left;
+}
+.media-player-app .media-area { /* Video/Visualizer Area */
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--media-player-video-bg);
+    overflow: hidden;
+    position: relative;
+}
+.media-player-app video {
+    max-width: 100%;
+    max-height: 100%;
+    display: none; /* Toggled by JS */
+    background-color: var(--media-player-video-bg); /* Ensure bg for letterboxing */
+}
+.media-player-app .visualizer-canvas {
+    display: none; /* Toggled by JS */
+    width: 100%;
+    height: 100%;
+}
+.media-player-app .placeholder-text {
+    display: flex; /* Shown by default */
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    color: var(--media-player-placeholder-text);
+    font-size: 1.5em;
+    font-weight: bold;
+    text-align: center;
+}
+.media-player-custom-controls { /* Bottom bar for play/pause, progress, volume */
+    background-color: var(--media-player-controls-bg);
+    padding: 8px 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+    border-top: 1px solid var(--border-primary);
+}
+.media-player-custom-controls button { /* Play/pause, volume icon */
+    background: none;
+    border: none;
+    color: var(--media-player-text);
+    font-size: 1.3em;
+    cursor: pointer;
+    padding: 0 5px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+.media-player-custom-controls button i { font-size: 1em; margin: 0; }
+
+.media-player-custom-controls .progress-bar {
+    flex-grow: 1;
+    height: 8px;
+    cursor: pointer;
+    background-color: var(--bg-primary); /* Fallback for gradient */
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+    -webkit-appearance: none;
+    appearance: none;
+    padding: 0;
+    border: 1px solid var(--border-secondary);
+    /* Gradient applied by JS */
+    background: linear-gradient(to right, var(--accent-primary) 0%, var(--bg-primary) 0%);
+}
+input[type=range].progress-bar { color: var(--accent-primary); /* For some browsers */ }
+
+.media-player-custom-controls .progress-bar::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 12px;
+    height: 12px;
+    background: var(--accent-primary);
+    border-radius: 50%;
+    cursor: pointer;
+    margin-top: -2px; /* Adjust to align with track */
+    box-shadow: 0 0 2px rgba(0,0,0,0.5);
+    border: 1px solid var(--border-secondary);
+}
+.media-player-custom-controls .progress-bar::-moz-range-thumb {
+    width: 12px;
+    height: 12px;
+    background: var(--accent-primary);
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+}
+.media-player-custom-controls .time-display {
+    font-size: 0.85em;
+    min-width: 90px; /* To prevent layout shifts */
+    text-align: center;
+}
+.media-player-custom-controls .volume-control {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.media-player-custom-controls .volume-slider {
+    width: 70px;
+    height: 6px;
+    cursor: pointer;
+    -webkit-appearance: none;
+    appearance: none;
+    background: var(--bg-primary); /* Track background */
+    border-radius: 3px;
+    border: 1px solid var(--border-secondary);
+}
+.media-player-custom-controls .volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 12px;
+    height: 12px;
+    background: var(--accent-primary);
+    border-radius: 50%;
+    cursor: pointer;
+    margin-top: -3px; /* Adjust for track height */
+}
+.media-player-custom-controls .volume-slider::-moz-range-thumb {
+    width: 12px;
+    height: 12px;
+    background: var(--accent-primary);
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+}
+
+/* ========================================================================== */
+/* --- BROWSER APP --- */
+/* ========================================================================== */
+.browser-app {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-color: var(--browser-bg);
+    overflow: hidden;
+}
+.browser-toolbar {
+    display: flex;
+    align-items: center;
+    padding: 5px 8px;
+    background-color: var(--browser-toolbar-bg);
+    border-bottom: 1px solid var(--border-primary);
+    flex-shrink: 0;
+    gap: 8px;
+}
+.browser-toolbar input[type="text"] { /* URL Input */
+    flex-grow: 1;
+    padding: 4px 6px;
+    font-size: 0.9em;
+    border: 1px solid var(--border-secondary);
+    background-color: var(--browser-input-bg);
+    color: var(--browser-input-text);
+    border-radius: 3px;
+    outline: none;
+}
+.browser-toolbar input[type="text"]:focus {
+    border-color: var(--border-active); /* Highlight on focus */
+}
+.browser-toolbar button { /* Nav buttons, Go button */
+    background-color: var(--browser-button-bg);
+    color: var(--text-primary);
+    border: 1px solid var(--border-primary);
+    padding: 3px 8px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: background-color 0.1s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 30px; /* For icon-only buttons */
+}
+.browser-toolbar button i { font-size: 1em; margin: 0; }
+.browser-toolbar button:hover {
+    background-color: var(--browser-button-hover);
+}
+.browser-toolbar button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+.browser-content { /* Area for iframe or placeholder */
+    flex-grow: 1;
+    background-color: #fff; /* Default iframe background if src is blank */
+    border: none;
+    overflow: auto; /* If iframe content overflows */
+    position: relative; /* For placeholder */
+}
+.browser-content iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block; /* Controlled by JS */
+}
+.browser-app .iframe-placeholder { /* Warning message */
+    display: flex; /* Shown by JS */
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start; /* Align text to left */
+    height: 100%;
+    color: var(--browser-iframe-placeholder-text);
+    background-color: var(--browser-iframe-placeholder-bg);
+    text-align: left;
+    padding: 20px;
+    font-size: 0.9em;
+    line-height: 1.4;
+    position: absolute; /* Overlay iframe area */
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1;
+}
+.browser-app .iframe-placeholder h4 {
+    margin-top:0;
+    margin-bottom: 10px;
+    color: var(--accent-danger);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.browser-app .iframe-placeholder h4 i { font-size: 1.2em; }
+.browser-app .iframe-placeholder p { margin-bottom: 8px; }
+
+/* ========================================================================== */
+/* --- SETTINGS APP (NEW UI) --- */
+/* ========================================================================== */
+.settings-app {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-color: var(--bg-secondary);
+    padding: 10px;
+    gap: 15px; /* Space between sections */
+    overflow-y: auto;
+}
+.settings-section {
+    background-color: var(--bg-primary);
+    padding: 15px 20px;
+    border-radius: 8px;
+    border: 1px solid var(--border-primary);
+    flex-shrink: 0;
+}
+.settings-section h3 {
+    margin-top: 0;
+    margin-bottom: 0; /* Handled by group padding */
+    padding-bottom: 10px;
+    color: var(--text-secondary);
+    font-size: 1.1em;
+}
+.settings-section h3 > i {
+    margin-right: 8px;
+    color: var(--accent-primary);
+    width: 1.2em;
+    text-align: center;
+}
+.settings-group {
+    padding: 15px 0;
+    border-bottom: 1px solid var(--border-secondary);
+}
+.settings-section .settings-section-content > .settings-group:last-of-type {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+.settings-group h4 {
+    margin: 0 0 4px 0;
+    font-size: 1em;
+    color: var(--text-primary);
+}
+.settings-group p {
+    font-size: 0.85em;
+    color: var(--settings-footer-text);
+    margin-bottom: 15px;
+    max-width: 90%;
+}
+.settings-group p.warning-text {
+    color: var(--accent-secondary);
+}
+
+.settings-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    min-height: 32px;
+}
+.settings-item.two-column {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 15px;
+}
+.settings-item.two-column > .controls {
+    justify-content: flex-end;
+}
+.settings-item label:not(.switch) {
+    font-weight: 500;
+}
+.settings-item .controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Specific control styling */
+.settings-item input[type="color"],
+.settings-item select,
+.settings-item button {
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-primary);
+    border-radius: 4px;
+    padding: 5px 10px;
+    font-size: 0.9em;
+}
+.settings-item button {
+    cursor: pointer;
+    transition: background-color 0.1s ease;
+}
+.settings-item button:hover {
+    background-color: var(--border-primary);
+}
+.settings-item button.danger {
+    background-color: var(--accent-danger);
+    color: white;
+}
+.settings-item button.danger:hover {
+    background-color: var(--accent-danger-hover);
+}
+.settings-item .reset-button {
+    padding: 5px 8px;
+}
+.settings-item .preset-buttons {
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.settings-item .preset-buttons button {
+    color: white; /* Ensure text is visible on colored backgrounds */
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.4);
+}
+.wallpaper-selector {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 10px;
+    margin-top: 5px;
+}
+.wallpaper-selector img {
+    width: 100%;
+    height: 55px;
+    object-fit: cover;
+    border: 2px solid var(--border-secondary);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: border-color 0.1s ease, box-shadow 0.1s ease;
+}
+.wallpaper-selector img:hover {
+    border-color: var(--accent-primary);
+}
+.wallpaper-selector img.active {
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 6px var(--accent-primary);
+}
+.settings-item .status-text {
+    font-style: italic;
+    color: var(--settings-footer-text);
+    font-size: 0.9em;
+}
+
+/* Custom Toggle Switch */
+.settings-item .switch {
+  position: relative;
+  display: inline-block;
+  width: 38px;
+  height: 22px;
+}
+.settings-item .switch input { 
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.settings-item .slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--bg-tertiary);
+  transition: .2s;
+  border: 1px solid var(--border-primary);
+}
+.settings-item .slider:before {
+  position: absolute;
+  content: "";
+  height: 14px;
+  width: 14px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: .2s;
+}
+.settings-item input:checked + .slider {
+  background-color: var(--accent-primary);
+  border-color: var(--accent-primary);
+}
+.settings-item input:checked + .slider:before {
+  transform: translateX(16px);
+}
+.settings-item .slider.round { border-radius: 22px; }
+.settings-item .slider.round:before { border-radius: 50%; }
+
+.credits-list {
+    font-size: 0.9em;
+    line-height: 1.6;
+    padding-left: 15px;
+    list-style-type: disc;
+}
+.credits-list a {
+    color: var(--accent-primary);
+    text-decoration: none;
+}
+.credits-list a:hover {
+    text-decoration: underline;
+}
+
+/* ========================================================================== */
+/* --- CLOCK/TIMER/STOPWATCH APP (ClockApp) --- */
+/* ========================================================================== */
+.clock-timer-stopwatch-app {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+.clock-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--clock-app-tab-border);
+    flex-shrink: 0;
+    background-color: var(--bg-tertiary); /* Matches window title bar */
+}
+.clock-tabs button {
+    flex-grow: 1;
+    padding: 10px 5px;
+    font-size: 1em;
+    border: none;
+    border-bottom: 3px solid transparent; /* For active indicator */
+    background-color: var(--clock-app-tab-bg);
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: background-color 0.1s, border-color 0.1s;
+    border-right: 1px solid var(--clock-app-tab-border); /* Separator */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+.clock-tabs button i { font-size: 1em; margin: 0; }
+.clock-tabs button:last-child { border-right: none; }
+.clock-tabs button:hover {
+    background-color: var(--clock-app-tab-active-bg);
+}
+.clock-tabs button.active {
+    background-color: var(--clock-app-tab-active-bg);
+    border-bottom-color: var(--accent-primary);
+    font-weight: bold;
+}
+.clock-tab-content {
+    flex-grow: 1;
+    padding: 20px;
+    overflow-y: auto;
+    display: none; /* Shown by JS */
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 15px;
+}
+.clock-tab-content.active { display: flex; }
+
+.clock-tab-content .display { /* For clock, timer, stopwatch time */
+    font-size: 3em;
+    font-weight: bold;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    letter-spacing: 1px;
+    color: var(--accent-primary); /* Linked to theme accent color */
+    background-color: var(--bg-primary);
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: 1px solid var(--border-primary);
+    min-width: 200px; /* Ensure decent width */
+    text-align: center;
+}
+
+.clock-tab-content .controls { /* Container for buttons, inputs */
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.clock-tab-content button { /* General buttons in tabs */
+    background-color: var(--settings-button-bg); /* Reusing settings button style */
+    color: var(--text-primary);
+    border: 1px solid var(--border-primary);
+    padding: 8px 15px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color 0.1s ease;
+    font-size: 0.9em;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+.clock-tab-content button i { font-size: 0.9em; margin: 0; }
+.clock-tab-content button:hover {
+    background-color: var(--settings-button-hover);
+}
+.clock-tab-content button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+.clock-tab-content input[type="number"] { /* For timer inputs */
+    width: 60px;
+    padding: 5px;
+    background-color: var(--browser-input-bg); /* Reusing browser input style */
+    color: var(--browser-input-text);
+    border: 1px solid var(--border-secondary);
+    border-radius: 3px;
+    text-align: center;
+}
+.clock-tab-content .laps { /* For stopwatch laps */
+    margin-top: 15px;
+    list-style: none;
+    padding: 0 10px;
+    max-height: 100px; /* Scrollable if many laps */
+    overflow-y: auto;
+    font-size: 0.8em;
+    width: 90%; /* Take most of width */
+    text-align: center;
+    color: var(--text-secondary);
+    border: 1px solid var(--border-secondary);
+    border-radius: 3px;
+    background-color: var(--bg-primary);
+}
+.clock-tab-content .laps li {
+    padding: 3px 0;
+    border-bottom: 1px dashed var(--border-secondary);
+}
+.clock-tab-content .laps li:last-child { border-bottom: none; }
+
+/* Specifics for Clock Tab */
+#clock-tab-clock .display { font-size: 2.5em; /* Slightly smaller than timer/stopwatch */ }
+#clock-tab-clock .date-display {
+    font-size: 1em;
+    color: var(--text-secondary);
+    margin-top: 5px;
+}
+
+/* ========================================================================== */
+/* --- RECORDER APPS (Sound & Video) --- */
+/* ========================================================================== */
+.recorder-app {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around; /* Distribute space */
+    height: 100%;
+    padding: 15px;
+    gap: 15px;
+}
+.recorder-app .status {
+    font-style: italic;
+    color: var(--text-secondary);
+    text-align: center;
+}
+.recorder-app .controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+.recorder-app .controls button {
+    background-color: var(--settings-button-bg); /* Reusing */
+    color: var(--text-primary);
+    border: 1px solid var(--border-primary);
+    padding: 10px 20px; /* Larger buttons */
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.1s ease, color 0.1s ease;
+    font-size: 1em;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+.recorder-app .controls button i { font-size: 1em; margin: 0; }
+.recorder-app .controls button:hover {
+    background-color: var(--settings-button-hover);
+}
+.recorder-app .controls button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+.recorder-app .controls button.recording { /* Special style for record button when active */
+    background-color: var(--accent-danger);
+    color: white;
+}
+.recorder-app .controls button.recording i.fa-circle { /* Blinking dot */
+    color: white;
+    animation: pulse 1.5s infinite;
+}
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+.recorder-app .preview, /* For video recorder preview */
+.recorder-app .recording-output { /* For audio/video element after recording */
+    margin-top: 10px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+.recorder-app video#vr-preview { /* Video preview specific */
+    max-width: 100%;
+    max-height: 150px; /* Limit preview height */
+    background-color: #000; /* Black bg for video */
+    border: 1px solid var(--border-primary);
+    display: block;
+}
+.recorder-app audio, /* Audio output element */
+.recorder-app video:not(#vr-preview) { /* Video output element */
+    max-width: 100%;
+    margin-top: 10px;
+    display: block;
+}
+.recorder-app .download-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 8px;
+    color: var(--accent-primary);
+    text-decoration: none;
+    font-size: 0.9em;
+    padding: 3px 8px;
+    border: 1px solid var(--accent-primary);
+    border-radius: 3px;
+    background-color: var(--bg-secondary);
+}
+.recorder-app .download-link:hover {
+    text-decoration: underline;
+    background-color: var(--bg-tertiary);
+}
+.recorder-app .download-link i { font-size: 0.9em; margin: 0; }
+
+/* ========================================================================== */
+/* --- NOTES APP --- */
+/* ========================================================================== */
+.notes-app-container {
+    display: flex;
+    height: 100%;
+    background-color: var(--notes-app-bg);
+    color: var(--notes-app-text);
+}
+
+/* Sidebar (Note List) */
+.notes-app-sidebar {
+    width: 180px;
+    flex-shrink: 0;
+    background-color: var(--notes-app-sidebar-bg);
+    border-right: 1px solid var(--notes-app-sidebar-border);
+    display: flex;
+    flex-direction: column;
+}
+.notes-app-sidebar-header {
+    padding: 8px;
+    border-bottom: 1px solid var(--notes-app-sidebar-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.notes-app-sidebar-header button { /* "New Note" button */
+    background: none;
+    border: 1px solid var(--border-secondary);
+    color: var(--notes-app-text);
+    padding: 3px 8px;
+    font-size: 0.9em;
+    border-radius: 3px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+.notes-app-sidebar-header button i { font-size: 1em; margin: 0; }
+.notes-app-sidebar-header button:hover {
+    background-color: var(--notes-app-toolbar-button-hover); /* Reuse toolbar button hover */
+}
+.notes-app-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    overflow-y: auto;
+    flex-grow: 1;
+}
+.notes-app-list li {
+    padding: 10px 8px;
+    border-bottom: 1px solid var(--notes-app-sidebar-border);
+    cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 0.9em;
+    position: relative; /* For delete button positioning */
+}
+.notes-app-list li:hover {
+    background-color: var(--notes-app-list-item-hover-bg);
+}
+.notes-app-list li.active {
+    background-color: var(--notes-app-list-item-active-bg);
+    color: var(--notes-app-list-item-active-text);
+    font-weight: bold;
+}
+.notes-app-list li .delete-note-btn {
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: inherit; /* Inherit from li, changes if li is active */
+    font-size: 0.9em;
+    cursor: pointer;
+    padding: 2px 4px;
+    border-radius: 3px;
+    opacity: 0; /* Show on li hover */
+    transition: opacity 0.1s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+.notes-app-list li .delete-note-btn i { font-size: 1em; margin: 0; }
+.notes-app-list li:hover .delete-note-btn {
+    opacity: 1;
+}
+.notes-app-list li .delete-note-btn:hover {
+    background-color: var(--notes-app-delete-button-hover-bg);
+    color: var(--notes-app-delete-button-hover-text);
+}
+
+/* Main Editor Area */
+.notes-app-main {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Prevent editor overflow issues */
+}
+.notes-app-toolbar {
+    padding: 5px;
+    background-color: var(--notes-app-toolbar-bg);
+    border-bottom: 1px solid var(--border-primary);
+    flex-shrink: 0;
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+}
+.notes-app-toolbar button {
+    background-color: var(--notes-app-toolbar-button-bg);
+    color: var(--notes-app-text);
+    border: 1px solid var(--border-primary);
+    padding: 4px 8px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 0.9em;
+    min-width: 30px; /* For icon buttons */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+}
+.notes-app-toolbar button i { font-size: 0.9em; margin: 0; }
+.notes-app-toolbar button:hover {
+    background-color: var(--notes-app-toolbar-button-hover);
+}
+.notes-app-editor {
+    flex-grow: 1;
+    padding: 10px;
+    background-color: var(--notes-app-editor-bg);
+    overflow-y: auto;
+    outline: none; /* Remove default focus outline */
+    color: var(--notes-app-text);
+    font-size: 1em;
+    line-height: 1.5;
+}
+.notes-app-editor:empty::before { /* Placeholder text */
+    content: 'Select or create a note...';
+    color: grey; /* Using generic grey, not a theme variable for this placeholder */
+    font-style: italic;
+    pointer-events: none; /* Placeholder should not be interactive */
+    display: block;
+}
+.notes-app-editor[contenteditable="true"]:empty::before { /* Placeholder when editable */
+    content: 'Start writing your note...';
+}
+.notes-app-editor ul, .notes-app-editor ol { /* Basic list styling */
+    margin-left: 25px;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+.notes-app-editor li {
+    margin-bottom: 0.2em;
+}
+
+/* ========================================================================== */
+/* --- APP INSTALLER APP --- */
+/* ========================================================================== */
+.app-installer-app {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-color: var(--app-installer-bg);
+    color: var(--app-installer-text);
+    padding: 0; /* Content padding handled by sections */
+    overflow: hidden;
+}
+.app-installer-header {
+    padding: 20px;
+    text-align: center;
+    border-bottom: 1px solid var(--app-installer-list-border);
+    flex-shrink: 0;
+    background-color: var(--app-installer-list-header-bg); /* Use list header color for consistency */
+}
+.app-installer-header h3 {
+    margin-top: 0;
+    margin-bottom: 8px;
+    font-size: 1.2em;
+    color: var(--text-secondary);
+}
+.app-installer-header p { /* Subtitle */
+    margin-bottom: 18px;
+    font-size: 0.9em;
+    color: var(--app-installer-status);
+}
+.app-installer-header button {
+    background-color: var(--app-installer-button-bg);
+    color: var(--app-installer-text);
+    border: 1px solid var(--border-primary);
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.1s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 5px;
+    width: calc(100% - 20px); /* Full width on smaller screens, with margin */
+    max-width: 300px; /* Max width for buttons */
+    justify-content: center;
+}
+.app-installer-header button:first-of-type { /* App Library button, more prominent */
+    background-color: var(--accent-primary);
+    color: var(--text-secondary-dark); /* Ensure contrast on accent */
+    border-color: var(--accent-primary-hover);
+}
+.app-installer-header button:first-of-type:hover {
+    background-color: var(--accent-primary-hover);
+}
+.app-installer-header button:not(:first-of-type):hover { /* "Choose .js file" button */
+    background-color: var(--app-installer-button-hover);
+}
+.app-installer-header .status {
+    font-style: italic;
+    color: var(--app-installer-status);
+    margin-top: 15px;
+    min-height: 1.2em; /* Prevent layout jump */
+    font-size: 0.9em;
+}
+.app-installer-list-container {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 15px;
+    background-color: var(--app-installer-list-bg);
+}
+.app-installer-list-container h4 { /* "Installed Custom Apps:" title */
+    margin: 0 0 10px 0;
+    font-size: 1em;
+    color: var(--text-secondary);
+    border-bottom: 1px solid var(--app-installer-list-border);
+    padding-bottom: 8px;
+}
+.app-installer-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.app-installer-list li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    font-size: 0.95em;
+    border-radius: 4px;
+    margin-bottom: 6px;
+    border: 1px solid transparent; /* For hover effect */
+    transition: background-color 0.1s ease, border-color 0.1s ease;
+}
+.app-installer-list li:hover {
+    background-color: var(--app-installer-list-item-hover);
+    border-color: var(--app-installer-list-border); /* Subtle border on hover */
+}
+.app-installer-list li .icon {
+    font-size: 1.1em;
+    width: 1.2em;
+    height: 1.2em;
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+.app-installer-list li .icon img { max-width: 1.1em; max-height: 1.1em; vertical-align: middle; }
+.app-installer-list li .icon i { font-size: inherit; line-height: 1; vertical-align: middle; }
+.app-installer-list li .app-name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex-grow: 1;
+}
+.app-installer-list li.no-apps { /* "None installed yet" message */
+    font-style: italic;
+    color: var(--app-installer-status);
+    border: none;
+    padding: 8px;
+    justify-content: center;
+}
+.app-installer-list li.no-apps:hover { /* No hover effect for this item */
+    background-color: transparent;
+    border-color: transparent;
+}
+/* Uninstall button within the AppInstaller list */
+.app-installer-list li .uninstall-app-button {
+    background: none;
+    border: 1px solid transparent; /* Border appears on li:hover */
+    color: var(--uninstall-button-color);
+    font-size: 0.9em;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 3px;
+    margin-left: auto; /* Push to the right */
+    flex-shrink: 0;
+    transition: background-color 0.1s ease, color 0.1s ease, border-color 0.1s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+.app-installer-list li .uninstall-app-button i { font-size: 1em; margin: 0; }
+.app-installer-list li:hover .uninstall-app-button { /* Show border when li is hovered */
+    border-color: var(--border-secondary);
+}
+.app-installer-list li .uninstall-app-button:hover { /* Specific hover for the button */
+    background-color: var(--uninstall-button-hover-bg);
+    color: var(--uninstall-button-hover-color);
+    border-color: var(--uninstall-button-hover-bg); /* Match background */
+}
+
+/* ========================================================================== */
+/* --- OS DIALOG SYSTEM (Alerts, Confirms, Prompts) --- */
+/* ========================================================================== */
+#os-dialog-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 4000; /* Above all else */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.2s ease-out;
+    opacity: 1;
+}
+#os-dialog-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+.os-dialog {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.4);
+    width: 90%;
+    max-width: 450px;
+    border: 1px solid var(--border-primary);
+    transform: scale(1);
+    transition: transform 0.2s ease-out;
+}
+body:not(.animations-disabled) #os-dialog-overlay:not(.hidden) .os-dialog {
+    animation: fadeInScaleDialog 0.2s ease-out forwards;
+}
+@keyframes fadeInScaleDialog {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+.os-dialog h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 1.2em;
+    color: var(--accent-primary);
+}
+.os-dialog .os-dialog-content {
+    margin-bottom: 20px;
+    font-size: 0.95em;
+    line-height: 1.5;
+    white-space: pre-wrap; /* Respect newlines in messages */
+}
+.os-dialog .os-dialog-content input[type="text"],
+.os-dialog .os-dialog-content input[type="password"] {
+    width: 100%;
+    padding: 8px;
+    margin-top: 10px;
+    border: 1px solid var(--border-secondary);
+    border-radius: 4px;
+    font-size: 1em;
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+}
+.os-dialog .os-dialog-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+/* --- FIXED: Dialog Button Styles --- */
+.os-dialog .os-dialog-actions button {
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-primary);
+    padding: 8px 18px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease;
+}
+.os-dialog .os-dialog-actions button:active {
+    transform: scale(0.97);
+}
+.os-dialog .os-dialog-actions button:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-primary) 30%, transparent);
+}
+.os-dialog .os-dialog-actions button:hover {
+    background-color: var(--border-primary);
+}
+.os-dialog .os-dialog-actions button.primary {
+    background-color: var(--accent-primary);
+    color: var(--text-secondary-dark);
+    border-color: var(--accent-primary);
+}
+.os-dialog .os-dialog-actions button.primary:hover {
+    background-color: var(--accent-primary-hover);
+    border-color: var(--accent-primary-hover);
+}
+.os-dialog .os-dialog-actions button.danger {
+    background-color: var(--accent-danger);
+    color: var(--text-secondary-dark);
+    border-color: var(--accent-danger);
+}
+.os-dialog .os-dialog-actions button.danger:hover {
+    background-color: var(--accent-danger-hover);
+    border-color: var(--accent-danger-hover);
+}
+/* --- End Fixed Button Styles --- */
+
+.os-dialog .os-dialog-selection-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 300px;
+    overflow-y: auto;
+}
+.os-dialog .os-dialog-selection-list li {
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.1s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.os-dialog .os-dialog-selection-list li:hover {
+    background-color: var(--bg-tertiary);
+}
+.os-dialog .os-dialog-selection-list li i {
+    width: 1.2em;
+    text-align: center;
+    color: var(--accent-primary);
+}
+
+
+/* ========================================================================== */
+/* --- LOCK SCREEN SYSTEM --- */
+/* ========================================================================== */
+#lock-screen-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.85); /* Darker overlay */
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 2000; /* Highest */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--text-secondary-dark); /* For text directly on overlay if any */
+    transition: opacity 0.3s ease-out, visibility 0.3s ease-out;
+    opacity: 1;
+    visibility: visible;
+}
+#lock-screen-overlay.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.lock-screen-dialog { /* Common styles for setup and login dialogs */
+    background-color: var(--bg-primary); /* Use theme primary bg */
+    color: var(--text-primary);
+    padding: 30px 40px;
+    border-radius: 8px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+    text-align: center;
+    width: 100%;
+    max-width: 380px;
+    border: 1px solid var(--border-primary);
+    transform: scale(1);
+    transition: transform 0.2s ease-out; /* For subtle UI feedback */
+}
+.lock-screen-dialog.hidden {
+    display: none;
+}
+body:not(.animations-disabled) #lock-screen-overlay:not(.hidden) .lock-screen-dialog {
+    animation: fadeInScale 0.3s ease-out forwards;
+}
+@keyframes fadeInScale {
+    from { opacity: 0; transform: scale(0.95); }
+    to   { opacity: 1; transform: scale(1); }
+}
+
+.lock-screen-dialog h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 1.6em;
+    color: var(--accent-primary);
+}
+.lock-screen-dialog p {
+    margin-bottom: 15px;
+    font-size: 0.95em;
+    line-height: 1.5;
+}
+.lock-screen-dialog p.security-note {
+    font-size: 0.85em;
+    color: var(--accent-secondary);
+    margin-bottom: 20px;
+    border: 1px dashed var(--accent-secondary);
+    padding: 8px;
+    border-radius: 4px;
+    background-color: rgba(255, 152, 0, 0.05); /* Very light accent bg */
+}
+.lock-screen-dialog p.reset-note {
+    font-size: 0.85em;
+    margin-top: 20px;
+}
+.lock-screen-dialog p.reset-note a {
+    color: var(--accent-primary);
+    text-decoration: none;
+}
+.lock-screen-dialog p.reset-note a:hover {
+    text-decoration: underline;
+}
+
+.lock-screen-dialog input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 18px;
+    border: 1px solid var(--border-secondary);
+    border-radius: 4px;
+    font-size: 1em;
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+.lock-screen-dialog input[type="password"]:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-primary) 30%, transparent); /* Focus ring */
+}
+
+.lock-screen-dialog button {
+    background-color: var(--accent-primary);
+    color: var(--text-secondary-dark); /* Ensure contrast on accent */
+    border: none;
+    padding: 12px 25px;
+    margin: 10px 5px 0 5px; /* Top margin for spacing from inputs/messages */
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 500;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+.lock-screen-dialog button:hover {
+    background-color: var(--accent-primary-hover);
+}
+.lock-screen-dialog button:active {
+    transform: scale(0.98); /* Click feedback */
+}
+.lock-screen-dialog button#skip-password-btn { /* Specific style for skip button */
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+.lock-screen-dialog button#skip-password-btn:hover {
+    background-color: var(--border-primary); /* Darken tertiary for hover */
+}
+
+.lock-screen-message { /* For error/success messages */
+    min-height: 1.2em; /* Prevent layout shifts */
+    margin-bottom: 10px;
+    padding: 8px;
+    border-radius: 4px;
+    font-size: 0.9em;
+    font-weight: 500;
+    visibility: hidden; /* Hidden until populated by JS */
+    opacity: 0;
+    transition: opacity 0.2s, visibility 0.2s;
+}
+.lock-screen-message:not(:empty) { /* When message is set */
+    visibility: visible;
+    opacity: 1;
+}
+
+/* ========================================================================== */
+/* --- WELCOME SCREEN --- */
+/* ========================================================================== */
+#welcome-screen-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7); /* Slightly less dark than lock screen */
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    z-index: 1900; /* Below lock screen, above OS */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--text-primary-dark); /* For text on overlay itself */
+    transition: opacity 0.3s ease-out, visibility 0.3s ease-out;
+    opacity: 1;
+    visibility: visible;
+}
+#welcome-screen-overlay.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.welcome-dialog {
+    background-color: var(--bg-secondary); /* Use secondary for welcome */
+    color: var(--text-primary);
+    padding: 30px 40px;
+    border-radius: 8px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+    width: 100%;
+    max-width: 600px;
+    max-height: 85vh; /* Prevent very tall dialogs */
+    overflow-y: auto; /* Scroll if content exceeds max-height */
+    border: 1px solid var(--border-primary);
+    transform: scale(1);
+    transition: transform 0.2s ease-out;
+}
+body:not(.animations-disabled) #welcome-screen-overlay:not(.hidden) .welcome-dialog {
+    animation: fadeInScaleWelcome 0.4s 0.1s ease-out forwards;
+}
+@keyframes fadeInScaleWelcome {
+    from { opacity: 0; transform: translateY(20px) scale(0.98); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.welcome-dialog h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 1.8em;
+    color: var(--accent-primary);
+    text-align: center;
+}
+.welcome-dialog p {
+    margin-bottom: 15px;
+    font-size: 1em;
+    line-height: 1.6;
+}
+.welcome-dialog ul {
+    list-style: none; /* Custom list style with ::before */
+    padding-left: 0;
+    margin-bottom: 20px;
+}
+.welcome-dialog li {
+    margin-bottom: 12px;
+    padding-left: 25px; /* Space for custom bullet */
+    position: relative;
+}
+.welcome-dialog li::before { /* Custom bullet point */
+    content: "\f058"; /* Font Awesome check-circle icon */
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900; /* Solid icon */
+    color: var(--accent-success);
+    position: absolute;
+    left: 0;
+    top: 2px; /* Adjust vertical alignment */
+    font-size: 1.1em;
+}
+.welcome-dialog code { /* For inline code styling */
+    background-color: var(--bg-primary);
+    padding: 2px 5px;
+    border-radius: 3px;
+    font-family: monospace;
+    border: 1px solid var(--border-secondary);
+    font-size: 0.9em;
+}
+.welcome-dialog button#close-welcome-btn {
+    display: block; /* Center button */
+    margin: 25px auto 0 auto;
+    background-color: var(--accent-primary);
+    color: var(--text-secondary-dark);
+    border: none;
+    padding: 12px 30px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: 500;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+.welcome-dialog button#close-welcome-btn:hover {
+    background-color: var(--accent-primary-hover);
+}
+.welcome-dialog button#close-welcome-btn:active {
+    transform: scale(0.98);
+}
+
+/* ========================================================================== */
+/* --- CUSTOM CONTEXT MENU (New Compact Style) --- */
+/* ========================================================================== */
+#custom-context-menu {
+    position: fixed;
+    z-index: 3000;
+    background-color: var(--start-menu-bg);
+    border: 1px solid var(--border-primary);
+    border-radius: 6px; /* Slightly more rounded */
+    box-shadow: 3px 3px 12px var(--shadow-primary);
+    min-width: 200px;
+    padding: 4px; /* Padding around the entire menu */
+    color: var(--text-secondary);
+    opacity: 0;
+    transform: scale(0.95) translateY(10px);
+    visibility: hidden;
+    transition: opacity 0.1s ease-out, transform 0.1s ease-out, visibility 0s 0.1s;
+    display: flex;
+    flex-direction: column;
+    gap: 4px; /* Space between sections */
+}
+#custom-context-menu:not(.hidden) {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    visibility: visible;
+    transition: opacity 0.1s ease-out, transform 0.1s ease-out, visibility 0s;
+}
+body.animations-disabled #custom-context-menu { transition: none !important; }
+body.animations-disabled #custom-context-menu:not(.hidden) { opacity: 1; transform: none; visibility: visible; }
+
+#custom-context-menu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: contents; /* Makes the ul a non-visual container */
+}
+
+#custom-context-menu .context-menu-item {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    font-size: 0.9em;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color 0.08s ease;
+    border-radius: 4px;
+}
+#custom-context-menu .context-menu-item:hover {
+    background-color: var(--start-menu-hover);
+    color: var(--text-secondary);
+}
+#custom-context-menu .context-menu-item i {
+    width: 1.5em; /* consistent icon spacing */
+    text-align: center;
+    margin-right: 8px;
+    font-size: 1em;
+    color: var(--text-primary);
+}
+#custom-context-menu .context-menu-item:hover i {
+    color: inherit; /* Icon color matches text on hover */
+}
+
+#custom-context-menu .context-menu-separator {
+    height: 1px;
+    background-color: var(--border-primary);
+    margin: 0 4px; /* Separator doesn't touch edges */
+    padding: 0;
+    cursor: default;
+}
+#custom-context-menu .context-menu-separator:hover {
+    background-color: var(--border-primary);
+}
+
+/* New compact row for small items */
+#custom-context-menu .context-menu-small-item-row {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 4px 0;
+}
+#custom-context-menu .context-menu-small-item-row button {
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    font-size: 1.1em;
+    padding: 6px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    transition: background-color 0.08s ease;
+}
+#custom-context-menu .context-menu-small-item-row button:hover {
+    background-color: var(--start-menu-hover);
+    color: var(--text-secondary);
+}
+#custom-context-menu .context-menu-small-item-row button i {
+    margin: 0; /* No right margin for icons in small buttons */
+    font-size: 1.1em; /* Make icon slightly larger */
+}
+#custom-context-menu .context-menu-small-item-row button span {
+    font-size: 0.7em; /* Small text label below icon */
+}
+
+
+/* ========================================================================== */
+/* --- ANIMATION DISABLING (Global) --- */
+/* ========================================================================== */
+body.animations-disabled * {
+    transition: none !important;
+    animation: none !important;
+}
+
+/* ========================================================================== */
+/* --- DESKTOP WIDGETS --- */
+/* ========================================================================== */
+.desktop-widget {
+    position: absolute;
+    z-index: 5;
+    background-color: rgba(30, 30, 30, 0.85);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--border-secondary);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    color: var(--text-primary);
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+.desktop-widget:hover {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
+    border-color: var(--border-primary);
+}
+.desktop-widget.dragging {
+    transition: none;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+    opacity: 0.9;
+}
+.widget-dragger {
+    height: 20px;
+    background-color: rgba(0,0,0,0.2);
+    cursor: grab;
+    flex-shrink: 0;
+}
+.desktop-widget.dragging .widget-dragger {
+    cursor: grabbing;
+}
+.widget-content {
+    flex-grow: 1;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+.widget-close-button {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    width: 16px;
+    height: 16px;
+    background-color: rgba(0,0,0,0.3);
+    color: var(--text-primary);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    z-index: 10;
+    opacity: 0;
+    transition: opacity 0.1s ease, background-color 0.1s ease;
+}
+.desktop-widget:hover .widget-close-button {
+    opacity: 1;
+}
+.widget-close-button:hover {
+    background-color: var(--accent-danger);
+    color: white;
+}
+
+/* --- Digital Clock Widget (REDESIGNED & SMALLER) --- */
+.digital-clock-widget {
+    align-items: center;
+    justify-content: center;
+    padding: 15px 20px;
+    text-align: center;
+    gap: 8px;
+    background-color: var(--bg-primary);
+}
+.digital-clock-widget .digital-time {
+    font-size: 3.2em;
+    font-weight: 500;
+    color: var(--text-secondary);
+    font-family: 'Segment7', monospace, sans-serif;
+    line-height: 1.1;
+    letter-spacing: 2px;
+    text-shadow: 0 0 5px rgba(255,255,255,0.2);
+}
+.digital-clock-widget .digital-date {
+    font-size: 0.9em;
+    color: var(--text-primary);
+    opacity: 0.8;
+}
+
+/* --- Quick Note Widget --- */
+.quick-note-widget {
+    background-color: #fefabc;
+    color: #333;
+    border-color: #fadf78;
+}
+.quick-note-widget .widget-content {
+    overflow: visible;
+}
+.quick-note-widget textarea {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background-color: transparent;
+    resize: none;
+    outline: none;
+    padding: 5px 10px 10px 10px;
+    font-family: 'Segoe UI', 'Helvetica Neue', sans-serif;
+    font-size: 0.95em;
+    line-height: 1.4;
+    color: #333;
+}
+.quick-note-widget textarea::placeholder {
+    color: #a9a16f;
+}
+
+/* --- System Monitor Widget (REDESIGNED) --- */
+.system-monitor-widget {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    gap: 12px; /* Increased gap */
+}
+.system-monitor-widget .monitor-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9em;
+}
+.system-monitor-widget label {
+    width: 40px;
+    text-align: right;
+    font-weight: bold;
+    color: var(--text-secondary);
+}
+.system-monitor-widget .progress-bar-container {
+    flex-grow: 1;
+    height: 14px;
+    background-color: var(--bg-primary);
+    border-radius: 7px;
+    overflow: hidden;
+    border: 1px solid var(--border-secondary);
+}
+.system-monitor-widget .progress-bar {
+    height: 100%;
+    background-color: var(--accent-success);
+    border-radius: 7px 0 0 7px;
+    transition: width 0.5s ease-out;
+}
+.system-monitor-widget .progress-bar.mem {
+    background-color: var(--accent-secondary);
+}
+.system-monitor-widget span {
+    width: 50px; /* More space for memory values */
+    text-align: left;
+    font-family: monospace;
+}
+
+/* --- Image Frame Widget (IMPROVED) --- */
+.image-frame-widget {
+    background-color: var(--bg-primary);
+    padding: 5px;
+}
+.image-frame-widget .placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 2px dashed var(--border-primary);
+    border-radius: 4px;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: background-color 0.1s ease;
+}
+.image-frame-widget .placeholder:hover {
+    background-color: var(--bg-tertiary);
+}
+.image-frame-widget .placeholder i {
+    font-size: 2em;
+    margin-bottom: 8px;
+    opacity: 0.7;
+}
+.image-frame-widget .placeholder span {
+    font-size: 0.8em;
+}
+.image-frame-widget img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 2px;
+    cursor: pointer;
+}
+.image-frame-widget .hidden {
+    display: none;
+}
+
+/* --- To-Do List Widget (IMPROVED) --- */
+.todo-list-widget {
+    padding: 0;
+}
+.widget-content.todo-list-widget { /* --- FIXED: Correctly targets the content div for scrolling --- */
+    overflow-y: auto;
+}
+.todo-list-widget input[type="text"] {
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid var(--border-primary);
+    background-color: var(--bg-tertiary);
+    padding: 8px;
+    color: var(--text-primary);
+    outline: none;
+    font-size: 0.9em;
+    flex-shrink: 0;
+}
+.todo-list-widget ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    flex-grow: 1;
+}
+.todo-list-widget li {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    font-size: 0.9em;
+    border-bottom: 1px solid var(--border-secondary);
+    transition: background-color 0.1s ease;
+}
+.todo-list-widget li:hover {
+    background-color: var(--bg-tertiary);
+}
+.todo-list-widget li span {
+    flex-grow: 1;
+    cursor: pointer;
+    word-break: break-word;
+}
+.todo-list-widget li.completed span {
+    text-decoration: line-through;
+    opacity: 0.6;
+}
+.todo-list-widget li .delete-btn {
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    cursor: pointer;
+    opacity: 0.3;
+    transition: opacity 0.1s ease, color 0.1s ease;
+}
+.todo-list-widget li:hover .delete-btn {
+    opacity: 1;
+}
+.todo-list-widget li .delete-btn:hover {
+    color: var(--accent-danger);
+}
+
+/* --- Mini Calculator Widget (IMPROVED) --- */
+.mini-calc-widget {
+    padding: 8px;
+    background: #222;
+}
+.mini-calc-widget .display {
+    background: var(--bg-primary);
+    color: var(--text-secondary);
+    height: 40px;
+    padding: 0 10px;
+    text-align: right;
+    font-size: 1.5em;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    border-radius: 4px;
+    margin-bottom: 8px;
+    overflow: hidden;
+    white-space: nowrap;
+}
+.mini-calc-widget .buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+    gap: 5px;
+    height: calc(100% - 48px);
+}
+.mini-calc-widget button {
+    border: none;
+    border-radius: 4px;
+    font-size: 1em;
+    cursor: pointer;
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    transition: background-color 0.1s;
+}
+.mini-calc-widget button:hover {
+    background-color: var(--border-primary);
+}
+.mini-calc-widget button:active {
+    filter: brightness(0.8);
+}
+.mini-calc-widget button.operator {
+    background-color: var(--accent-primary);
+    color: var(--text-secondary-dark);
+}
+.mini-calc-widget button.operator:hover {
+    background-color: var(--accent-primary-hover);
+}
+/* --- NEW: Active operator style --- */
+.mini-calc-widget button.operator.active {
+    background-color: white;
+    color: var(--accent-primary);
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.4);
+}
+.mini-calc-widget button[data-val="="] {
+    background-color: var(--accent-secondary);
+    color: var(--text-secondary-dark);
+}
+.mini-calc-widget button[data-val="="]:hover {
+    background-color: var(--accent-secondary-hover);
+}
+.mini-calc-widget button.special {
+    background-color: var(--accent-danger);
+    color: var(--text-secondary-dark);
+}
+.mini-calc-widget button.special:hover {
+    background-color: var(--accent-danger-hover);
+}
+.mini-calc-widget .tall { grid-row: span 2; }
+.mini-calc-widget .wide { grid-column: span 2; }
