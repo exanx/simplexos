@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Simplex OS App Development Guide</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #2d2d2d;
+            color: #e0e0e0;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+        .guide-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #1e1e1e;
+            border: 1px solid #444444;
+            border-radius: 8px;
+            padding: 20px 40px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        h1, h2, h3 {
+            color: #ffffff;
+            border-bottom: 1px solid #444444;
+            padding-bottom: 10px;
+            margin-top: 1.5em;
+            margin-bottom: 1em;
+        }
+        h1 {
+            font-size: 2em;
+            text-align: center;
+            border-bottom: 2px solid #0078d4;
+            margin-top: 0;
+        }
+        h2 {
+            font-size: 1.5em;
+            color: #0078d4;
+        }
+        h3 {
+            font-size: 1.2em;
+            border-bottom-style: dashed;
+            color: #ff9800;
+        }
+        p, li {
+            font-size: 1em;
+        }
+        ul {
+            padding-left: 20px;
+            list-style-type: '» ';
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        a {
+            color: #108ee9;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        code {
+            background-color: #3a3a3a;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 0.9em;
+            border: 1px solid #555555;
+        }
+        pre {
+            background-color: #111111;
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid #555555;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        pre code {
+            background-color: transparent;
+            padding: 0;
+            border: none;
+            font-size: 0.85em;
+            white-space: pre-wrap;
+        }
+        strong {
+            color: #ff9800;
+        }
+        .required {
+            color: #f44336;
+            font-weight: bold;
+        }
+        .optional {
+            color: #4caf50;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="guide-container">
+        <h1>Simplex OS App Development Guide</h1>
+        <p>This guide explains how to create custom JavaScript applications for Simplex OS.</p>
+
+        <h2>1. The <code>simplexOS_AppConfig</code> Object</h2>
+        <p>Your app's <code>.js</code> file must define a global variable named <code>simplexOS_AppConfig</code>. This object is the manifest that tells the OS how to load and display your application.</p>
+        <p>It has the following properties:</p>
+        <ul>
+            <li>
+                <strong><code>name</code></strong> (String, <span class="required">Required</span>)<br>
+                The display name of your app (e.g., <code>"Pixel Art Editor"</code>). This appears in the window title bar and the Start Menu.
+            </li>
+            <li>
+                <strong><code>icon</code></strong> (String, <span class="required">Required</span>)<br>
+                An HTML string for the icon, typically a Font Awesome tag (e.g., <code>'&lt;i class="fa-solid fa-palette"&gt;&lt;/i&gt;'</code>). This is used on the desktop, taskbar, and in the Start Menu.
+            </li>
+            <li>
+                <strong><code>init</code></strong> (Function, <span class="required">Required</span>)<br>
+                The main function that builds and initializes your app's user interface and logic. It receives two arguments:
+                <ol>
+                    <li><code>contentEl</code>: The HTMLElement of the window's content area where you should render your app.</li>
+                    <li><code>windowId</code>: A unique string ID for that specific window instance.</li>
+                </ol>
+            </li>
+            <li>
+                <strong><code>defaultSize</code></strong> (Object, <span class="optional">Optional</span>)<br>
+                An object that defines the default window size in pixels. This is highly recommended for a better user experience.
+                <ul>
+                    <li><code>width</code> (Number): The default width of the window.</li>
+                    <li><code>height</code> (Number): The default height of the window.</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h2>2. The <code>init</code> Function In-Depth</h2>
+        <p>The <code>init</code> function is the core of your application. Here’s how to use it effectively:</p>
+        <ul>
+            <li><strong>Rendering the UI:</strong> The most direct method is to set the <code>innerHTML</code> of the <code>contentEl</code> with your app's HTML structure.</li>
+            <li><strong>Creating Unique IDs:</strong> To prevent conflicts when multiple instances of your app are open, use the <code>windowId</code> to create unique IDs for your elements. A common pattern is to create a prefix:
+                <pre><code>const appPrefix = `my-app-${windowId}`;
+contentEl.innerHTML = `&lt;button id="${appPrefix}-action-button"&gt;Click Me&lt;/button&gt;`;
+const myButton = contentEl.querySelector(`#${appPrefix}-action-button`);</code></pre>
+            </li>
+            <li><strong>Styling Your App:</strong> For a consistent look and feel, use the OS's CSS theme variables within your styles (e.g., in an inline <code>&lt;style&gt;</code> tag). Key variables include:
+                <ul>
+                    <li><code>var(--bg-primary)</code>, <code>var(--bg-secondary)</code>, <code>var(--bg-tertiary)</code></li>
+                    <li><code>var(--text-primary)</code>, <code>var(--text-secondary)</code></li>
+                    <li><code>var(--accent-primary)</code>, <code>var(--accent-danger)</code>, <code>var(--accent-success)</code></li>
+                    <li><code>var(--border-primary)</code>, <code>var(--border-secondary)</code></li>
+                </ul>
+            </li>
+            <li><strong>Handling Events:</strong> After rendering your UI, get references to your elements using <code>contentEl.querySelector()</code> and attach your event listeners.</li>
+            <li><strong>Cleanup Logic:</strong> If your app uses timers (<code>setInterval</code>), WebSockets, or adds global event listeners, it's crucial to clean them up when the window is closed to prevent memory leaks. The OS provides a mechanism for this:
+                <pre><code>// Inside your init function:
+const myTimer = setInterval(() => { console.log('tick'); }, 1000);
+
+if (window.openWindows && window.openWindows[windowId]) {
+  window.openWindows[windowId].cleanup = () => {
+    clearInterval(myTimer);
+    console.log("My Cool App resources cleaned up!");
+  };
+}</code></pre>
+            </li>
+            <li><strong>OS Dialogs:</strong> Instead of using the browser's default dialogs, use the OS's built-in, stylistically consistent system. These are available on the <code>window</code> object and return Promises:
+                <ul>
+                    <li><code>window.showOSAlert(message, title)</code></li>
+                    <li><code>window.showOSConfirm(message, title)</code></li>
+                    <li><code>window.showOSConfirmDanger(message, title)</code></li>
+                    <li><code>window.showOSPrompt(message, title, defaultValue, inputType)</code></li>
+                </ul>
+            </li>
+        </ul>
+
+        <h2>3. Example App Structure</h2>
+        <p>Here is a complete, minimal example of a functional app file (<code>MyCoolApp.js</code>).</p>
+        <pre><code>/**
+ * My Cool App for Simplex OS
+ * A simple demonstration app.
+ */
+var simplexOS_AppConfig = {
+  name: "My Cool App",
+  icon: '&lt;i class="fa-solid fa-rocket"&gt;&lt;/i&gt;',
+  defaultSize: { width: 400, height: 250 },
+
+  init: function(contentEl, windowId) {
+    // Use a unique prefix for all element IDs
+    const appPrefix = `my-cool-app-${windowId}`;
+
+    // Define the UI for the app
+    contentEl.innerHTML = `
+      &lt;style&gt;
+        /* Scoped styles for this app */
+        #${appPrefix}-container {
+          padding: 20px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          height: 100%;
+          text-align: center;
+          gap: 15px;
+        }
+        #${appPrefix}-container h3 {
+          color: var(--accent-primary);
+          margin-top: 0;
+        }
+        #${appPrefix}-button {
+          padding: 8px 15px;
+          border-radius: 4px;
+          border: 1px solid var(--border-primary);
+          background-color: var(--bg-tertiary);
+          color: var(--text-primary);
+          cursor: pointer;
+        }
+        #${appPrefix}-button:hover {
+          background-color: var(--accent-primary);
+          color: var(--text-secondary);
+        }
+      &lt;/style&gt;
+      &lt;div id="${appPrefix}-container"&gt;
+        &lt;h3&gt;Welcome to ${this.name}!&lt;/h3&gt;
+        &lt;p&gt;This is a custom application running inside Simplex OS.&lt;/p&gt;
+        &lt;button id="${appPrefix}-button"&gt;Click Me for a System Alert&lt;/button&gt;
+      &lt;/div&gt;`;
+
+    // Get a reference to the button
+    const button = contentEl.querySelector(`#${appPrefix}-button`);
+
+    // Add an event listener
+    button.addEventListener('click', () => {
+      // Use the OS dialog system instead of a standard alert()
+      window.showOSAlert("Hello from " + this.name + "!", "Greeting");
+    });
+
+    console.log(this.name + " has been initialized for window: " + windowId);
+  }
+};</code></pre>
+
+        <h2>4. Installation</h2>
+        <ol>
+            <li>Save your application code as a <code>.js</code> file (e.g., <code>MyCoolApp.js</code>).</li>
+            <li>Open the "App Installer" application within Simplex OS.</li>
+            <li>Click the "Install from .js File..." button.</li>
+            <li>Select your <code>.js</code> file.</li>
+            <li>A security warning will appear. <strong>Only install code from sources you trust.</strong> Confirm the installation.</li>
+            <li>Your app will now be available in the Start Menu and can be added to the desktop as a shortcut.</li>
+        </ol>
+    </div>
+</body>
+</html>
