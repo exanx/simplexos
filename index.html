@@ -675,6 +675,8 @@
                      return `<img src="${appConfig.iconPath}" alt="${appConfig.name}" width="${imgSize}" height="${imgSize}">`;
                  } else if (appConfig.iconPath) {
                      return `<span class="icon" style="font-size: ${fontSize}; width: ${containerSize}; height: ${containerSize};">${appConfig.iconPath}</span>`;
+                 } else if (typeof iconContent === 'string' && iconContent.trim().toLowerCase().startsWith('<svg')) { // <-- ADD THIS CONDITION
+                     return `<span class="icon" style="font-size: ${fontSize}; width: ${containerSize}; height: ${containerSize};">${iconContent}</span>`;
                  } else if (typeof iconContent === 'string' && iconContent.startsWith('<i')) {
                      return `<span class="icon" style="font-size: ${fontSize}; width: ${containerSize}; height: ${containerSize};">${iconContent}</span>`;
                  } else if (typeof iconContent === 'string' && (iconContent.includes('/') || iconContent.startsWith('data:image'))) {
@@ -683,7 +685,6 @@
                      return `<span class="icon" style="font-size: ${fontSize}; width: ${containerSize}; height: ${containerSize};"><i class="fa-solid fa-puzzle-piece"></i></span>`;
                  }
             }
-
 
             // --- Application Definitions ---
             let apps = {
@@ -1387,7 +1388,7 @@
             <div class="settings-section">
                 <h3 class="settings-section-toggle">About Simplex OS <i class="fa-solid fa-chevron-down collapse-icon"></i></h3>
                 <div class="settings-section-content">
-                    <p><strong>Version:</strong> Simplex OS V1.4 (Leo)</p> <p>Built with HTML, CSS, and JavaScript.</p>
+                    <p><strong>Version:</strong> Simplex OS V1.5 (Gregory)</p> <p>Built with HTML, CSS, and JavaScript.</p>
                     <div class="settings-subsection-title">Credits</div>
                     <ul class="credits-list">
                         <li><strong>Icons:</strong> <a href="https://fontawesome.com/" target="_blank">Font Awesome</a></li>
@@ -2249,6 +2250,7 @@
                     if (appId === 'Settings') { currentW = 520; currentH = 480} 
                     if (appId === 'NotesApp') { currentW = 600; currentH = 450; } 
                     if (appId === 'AppInstaller') { currentW = 420; currentH = 500; }
+					if (appId === 'VideoRecorder') { currentW = 450; currentH = 500; }
                 }
                 // --- MODIFICATION END ---
 
