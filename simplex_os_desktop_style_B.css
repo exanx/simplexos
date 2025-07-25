@@ -1155,40 +1155,34 @@ body:not(.animations-disabled) .window.minimized {
 }
 
 /* ========================================================================== */
-/* --- PAINT APP --- */
+/* --- REDESIGNED PAINT APP (WINDOWS-LIKE) --- */
 /* ========================================================================== */
-.paint-app {
+.paint-app-container {
     display: flex;
     flex-direction: column;
     height: 100%;
-    background-color: var(--bg-primary); /* Fallback if canvas fails */
-    position: relative; /* For canvas positioning */
+    background-color: var(--bg-primary);
 }
-.paint-app .toolbar {
+
+.paint-toolbar.top-toolbar {
     display: flex;
     align-items: center;
     padding: 5px;
     background-color: var(--paint-toolbar-bg);
     border-bottom: 1px solid var(--border-primary);
-    flex-wrap: wrap; /* Allow tools to wrap */
-    gap: 8px; /* Consistent gap for wrapped items */
+    flex-wrap: wrap;
+    gap: 5px;
     flex-shrink: 0;
     color: var(--paint-toolbar-text);
 }
-.paint-app .toolbar label {
+
+.paint-toolbar.top-toolbar label {
     margin: 0 2px 0 5px;
     font-size: 0.9em;
 }
-/* Tool buttons and checkbox labels that act like buttons */
-.paint-app .toolbar button.tool,
-.paint-app .toolbar input[type="checkbox"] + label {
-    min-width: 30px; /* Ensure consistent button size for icons */
-    padding: 4px 6px;
-    font-size: 1.1em; /* For larger icons */
-    justify-content: center;
-}
-.paint-app .toolbar button,
-.paint-app .toolbar input[type="checkbox"] + label {
+
+.paint-toolbar.top-toolbar button,
+.paint-toolbar.top-toolbar input[type="checkbox"] + label {
     padding: 4px 8px;
     cursor: pointer;
     border: 1px solid var(--border-primary);
@@ -1196,118 +1190,121 @@ body:not(.animations-disabled) .window.minimized {
     color: var(--paint-toolbar-text);
     border-radius: 3px;
     transition: background-color 0.1s ease;
-    font-size: 0.9em; /* For text buttons */
+    font-size: 0.9em;
     line-height: 1;
-    vertical-align: middle;
-    margin-right: 5px; /* Default spacing */
     display: inline-flex;
     align-items: center;
     gap: 4px;
 }
-.paint-app .toolbar button i,
-.paint-app .toolbar label i {
-    font-size: 1em; /* Icon size relative to button font-size */
+
+.paint-toolbar.top-toolbar button i,
+.paint-toolbar.top-toolbar label i {
+    font-size: 1em;
     margin: 0;
 }
-.paint-app .toolbar button:hover,
-.paint-app .toolbar input[type="checkbox"] + label:hover {
+
+.paint-toolbar.top-toolbar button:hover,
+.paint-toolbar.top-toolbar input[type="checkbox"] + label:hover {
     background-color: var(--paint-toolbar-button-hover);
 }
-.paint-app .toolbar button.active, /* For active tool */
-.paint-app .toolbar input[type="checkbox"]:checked + label { /* For active checkbox toggle */
+
+.paint-toolbar.top-toolbar button.active,
+.paint-toolbar.top-toolbar input[type="checkbox"]:checked + label {
     background-color: var(--accent-primary);
     border-color: var(--accent-primary-hover);
     color: var(--text-secondary);
     box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
 }
-.paint-app .toolbar input[type="color"] {
+
+.paint-toolbar.top-toolbar button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.paint-toolbar.top-toolbar input[type="color"] {
     width: 30px;
     height: 25px;
     padding: 0;
     border: 1px solid var(--border-primary);
     cursor: pointer;
-    vertical-align: middle;
-    background-color: var(--bg-secondary); /* Background for the picker itself */
+    background-color: var(--bg-secondary);
 }
-.paint-app .toolbar input[type="color"]::-webkit-color-swatch-wrapper { padding: 1px; }
-.paint-app .toolbar input[type="color"]::-webkit-color-swatch { border: none; border-radius: 2px; }
-.paint-app .toolbar input[type="color"]::-moz-color-swatch { border: none; border-radius: 2px; }
 
-.paint-app .toolbar input[type="range"] {
+.paint-toolbar.top-toolbar input[type="range"] {
     width: 80px;
-    vertical-align: middle;
     cursor: pointer;
 }
-.paint-app .toolbar .size-indicator {
+
+.paint-toolbar.top-toolbar .size-indicator {
     font-size: 0.9em;
     min-width: 20px;
     text-align: right;
-    margin-right: 5px;
-    display: inline-block;
-    vertical-align: middle;
 }
-.paint-app .toolbar #clear-canvas-button {
-    background-color: var(--accent-danger);
-    color: var(--text-secondary);
-}
-.paint-app .toolbar #clear-canvas-button:hover {
-    background-color: var(--accent-danger-hover);
-}
-.paint-app .toolbar #save-paint-button {
-    background-color: var(--accent-success);
-    color: var(--text-secondary);
-}
-.paint-app .toolbar #save-paint-button:hover {
-    background-color: var(--accent-success-hover);
-}
-.paint-app .toolbar .tool-options { /* e.g., for Text tool */
-    display: none; /* Hidden by default */
-    align-items: center;
-    gap: 5px;
-    margin-left: 5px;
-    vertical-align: middle;
-}
-.paint-app .toolbar .tool-options.visible {
-    display: inline-flex; /* Shown by JS */
-}
-.paint-app .toolbar input[type="text"] { /* Text input within tool options */
-    padding: 3px 5px;
-    background-color: var(--paint-text-input-bg);
-    color: var(--paint-text-input-text);
-    border: 1px solid var(--border-secondary);
-    border-radius: 3px;
-    width: 100px;
-    font-size: 0.9em;
-}
-.paint-app .toolbar input[type="checkbox"] { /* Hide actual checkbox, use label for styling */
+
+.paint-toolbar.top-toolbar input[type="checkbox"] {
     display: none;
 }
-.paint-app .canvas-container {
-    position: relative;
+
+.paint-main-content {
+    display: flex;
     flex-grow: 1;
-    overflow: hidden; /* Important for canvas resizing */
+    overflow: hidden;
 }
-.paint-app .paint-canvas,
-.paint-app .paint-overlay-canvas {
-    position: absolute;
-    top: 0;
-    left: 0;
-    display: block; /* Removes extra space below canvas */
-    width: 100%; /* Will be set by JS to container size */
-    height: 100%;
+
+.paint-canvas-area {
+    flex-grow: 1;
+    overflow: auto; /* This makes the canvas scrollable */
+    background-color: var(--bg-secondary);
+    display: grid; /* Use Grid for easy centering */
+    place-items: center; /* Center the canvas */
+    padding: 10px; /* Add some padding so the canvas doesn't touch the edge */
 }
-.paint-app .paint-canvas {
-    background-color: var(--paint-canvas-bg);
-    cursor: crosshair; /* Default cursor */
+
+.paint-canvas,
+.paint-overlay-canvas {
+    grid-area: 1 / 1; /* Stack both canvases in the same grid cell */
+    cursor: crosshair;
+    box-shadow: 0 0 5px rgba(0,0,0,0.2);
+}
+
+.paint-canvas {
+    background-color: var(--paint-canvas-bg-dark);
     z-index: 1;
 }
-.paint-app .paint-overlay-canvas { /* For drawing previews (shapes, text) */
-    pointer-events: none; /* Overlay should not capture mouse events */
+
+.paint-overlay-canvas {
+    pointer-events: none;
+    background-color: transparent;
+    box-shadow: none;
     z-index: 2;
 }
-.paint-app .paint-canvas.text-cursor { cursor: text; }
-.paint-app .paint-canvas.shape-cursor { cursor: crosshair; } /* Or other shape-specific cursor */
-.paint-app .paint-canvas.fill-cursor { cursor: var(--paint-fill-cursor, crosshair); }
+
+
+.paint-color-palette {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 5px;
+    background-color: var(--paint-toolbar-bg);
+    border-left: 1px solid var(--border-primary);
+    flex-shrink: 0;
+}
+
+.color-box {
+    width: 28px;
+    height: 28px;
+    border: 1px solid var(--border-secondary);
+    border-radius: 3px;
+    cursor: pointer;
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.color-box:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 5px rgba(255,255,255,0.3);
+}
+
+
 
 
 /* ========================================================================== */
