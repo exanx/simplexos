@@ -27,6 +27,15 @@ const appListData = [
     category: 'Productivity',
     description: 'A lightweight notes app that supports Markdown for rich text formatting.'
   },
+
+  {
+    id: 'Sky Strike 00054487',
+    name: 'Sky Strike',
+    // This is a Font Awesome icon tag (from the "brands" set).
+    icon: '<i class="fa-brands fa-markdown"></i>',
+    category: 'Productivity',
+    description: 'A simple aeroplane shooter game with sound.'
+  },
   
   
   //END OF APPS
