@@ -33,7 +33,7 @@ const appListData = [
     name: 'Sky Strike',
     // This is a Font Awesome icon tag (from the "brands" set).
     icon: '<i class="fa-solid fa-jet-fighter"></i>',
-    category: 'Productivity',
+    category: 'Games',
     description: 'A simple aeroplane shooter game with sound.'
   },
   
