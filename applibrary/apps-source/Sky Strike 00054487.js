@@ -116,7 +116,6 @@ var simplexOS_AppConfig = {
         function playSound(type) {
             if (!soundEnabled) return;
             
-            // Lazy load audio context (required for mobile Safari)
             if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             if (audioCtx.state === 'suspended') audioCtx.resume();
 
@@ -246,12 +245,9 @@ var simplexOS_AppConfig = {
             if (!isPlaying) return;
             const settings = diffSettings[currentMode];
             
-            // Background
             ctx.fillStyle = '#0a0a1a';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // Stars
-            ctx.fillStyle = '#ffffff';
             stars.forEach(star => {
                 star.y += star.speed;
                 if(star.y > canvas.height) {
@@ -261,11 +257,9 @@ var simplexOS_AppConfig = {
                 ctx.fillRect(star.x, star.y, star.size, star.size);
             });
 
-            // Player Movement
             if (keys.left && player.x > 0) player.x -= player.speed;
             if (keys.right && player.x < canvas.width - player.width) player.x += player.speed;
 
-            // Player Shooting
             if (keys.shoot && Date.now() - lastShootTime > 150) {
                 bullets.push({
                     x: player.x + player.width / 2 - 3,
@@ -279,7 +273,6 @@ var simplexOS_AppConfig = {
                 lastShootTime = Date.now();
             }
 
-            // Draw Player
             ctx.fillStyle = player.color;
             ctx.beginPath();
             ctx.moveTo(player.x + player.width/2, player.y);
@@ -288,7 +281,6 @@ var simplexOS_AppConfig = {
             ctx.lineTo(player.x, player.y + player.height);
             ctx.fill();
 
-            // Bullets
             for (let i = bullets.length - 1; i >= 0; i--) {
                 let b = bullets[i];
                 b.y -= b.speed;
@@ -297,7 +289,6 @@ var simplexOS_AppConfig = {
                 if (b.y < -20) bullets.splice(i, 1);
             }
 
-            // Enemies
             if (frameCount % settings.spawnRate === 0) {
                 enemies.push({
                     x: Math.random() * (canvas.width - 30),
@@ -352,7 +343,6 @@ var simplexOS_AppConfig = {
                 if (!hit && e.y > canvas.height) enemies.splice(i, 1);
             }
 
-            // Particles
             for (let i = particles.length - 1; i >= 0; i--) {
                 let p = particles[i];
                 p.x += p.vx;
@@ -380,7 +370,6 @@ var simplexOS_AppConfig = {
                      r2.y + r2.height < r1.y);
         }
 
-        // --- Game Controls Logic ---
         function startGame(mode) {
             playSound('start'); 
             initGame(mode);
@@ -420,11 +409,9 @@ var simplexOS_AppConfig = {
             }, 500); 
         }
 
-        // --- Universal Button Touch/Click Handler ---
-        // This ensures mobile devices respond instantly without the 300ms click delay
         const bindButton = (element, callback) => {
             element.addEventListener('touchstart', (e) => {
-                e.preventDefault(); // Prevents double-firing from synthetic click
+                e.preventDefault(); 
                 callback(e);
             }, {passive: false});
             element.addEventListener('click', (e) => {
@@ -433,12 +420,10 @@ var simplexOS_AppConfig = {
             });
         };
 
-        // Menu Button Listeners
         bindButton(btnEasy, () => startGame('easy'));
         bindButton(btnMedium, () => startGame('medium'));
         bindButton(btnHard, () => startGame('hard'));
 
-        // Sound Toggle Listener
         bindButton(soundToggleBtn, (e) => {
             e.stopPropagation();
             soundEnabled = !soundEnabled;
@@ -447,10 +432,8 @@ var simplexOS_AppConfig = {
             gameContainer.focus();
         });
 
-        // Click on background to regain focus
         contentEl.addEventListener('mousedown', () => gameContainer.focus());
 
-        // --- Keyboard Events ---
         const handleKeyDown = (e) => {
             if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' '].includes(e.key)) {
                 e.preventDefault(); 
@@ -486,14 +469,11 @@ var simplexOS_AppConfig = {
         gameContainer.addEventListener('keyup', handleKeyUp);
         gameContainer.addEventListener('blur', handleBlur);
 
-        // --- Bottom Control Pad Touch Events ---
         const addControl = (element, keyName) => {
-            // Mouse
             element.addEventListener('mousedown', (e) => { e.preventDefault(); keys[keyName] = true; });
             element.addEventListener('mouseup', (e) => { e.preventDefault(); keys[keyName] = false; });
             element.addEventListener('mouseleave', (e) => { e.preventDefault(); keys[keyName] = false; });
             
-            // Touch
             element.addEventListener('touchstart', (e) => { e.preventDefault(); keys[keyName] = true; }, {passive: false});
             element.addEventListener('touchend', (e) => { e.preventDefault(); keys[keyName] = false; }, {passive: false});
             element.addEventListener('touchcancel', (e) => { e.preventDefault(); keys[keyName] = false; }, {passive: false});
@@ -503,7 +483,6 @@ var simplexOS_AppConfig = {
         addControl(btnRight, 'right');
         addControl(btnShoot, 'shoot');
 
-        // Initial setup
         initGame('medium');
         isPlaying = false; 
         ctx.fillStyle = '#0a0a1a';
@@ -511,9 +490,10 @@ var simplexOS_AppConfig = {
         
         setTimeout(() => gameContainer.focus(), 100);
 
-        // --- Cleanup (Runs when window is closed) ---
-        if (openWindows[windowId]) {
-            openWindows[windowId].cleanup = () => {
+        // --- Safe Cleanup Check (Fixes Refresh ReferenceError) ---
+        const activeWindows = typeof openWindows !== 'undefined' ? openWindows : (window.openWindows || null);
+        if (activeWindows && activeWindows[windowId]) {
+            activeWindows[windowId].cleanup = () => {
                 isPlaying = false;
                 cancelAnimationFrame(animationId);
                 if (audioCtx && audioCtx.state !== 'closed') {
