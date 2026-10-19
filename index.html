@@ -221,6 +221,7 @@
             let nextZIndex = 10;
             let activeWindowId = null;
             let desktopShortcuts = [];
+            let desktopIconPositions = {};
             let osLocked = true;
             let desktopIconsVisible = true;
             let desktopIconArrangement = 'row';
@@ -241,6 +242,7 @@
             // --- Storage Keys ---
             const INSTALLED_APPS_STORAGE_KEY = 'simplexos_installed_apps_v2';
             const DESKTOP_SHORTCUTS_KEY = 'simplexos_desktop_shortcuts_v1';
+            const DESKTOP_ICON_POSITIONS_KEY = 'simplexos_desktop_icon_positions_v1';
             const BG_COLOR1_KEY = 'simplexos_bg_color1_v1';
             const BG_COLOR2_KEY = 'simplexos_bg_color2_v1';
             const WALLPAPER_KEY = 'simplexos_wallpaper_v1';
@@ -1989,6 +1991,10 @@
                     <p>Discover new apps or manage your installed ones.</p>
                     <button id="installer-open-library-${windowId}" title="Find more apps (opens new tab)"><i class="fa-solid fa-store"></i> App Library</button>
                     <button id="installer-choose-file-${windowId}"><i class="fa-solid fa-upload"></i> Install from .js File...</button>
+                    <div class="app-installer-dropzone" id="installer-dropzone-${windowId}" tabindex="0" role="button" aria-label="Drop a JavaScript app file here or choose one">
+                        <i class="fa-solid fa-file-arrow-up"></i>
+                        <span>Or drag and drop a <strong>.js</strong> file here</span>
+                    </div>
                     <div class="status" id="installer-status-${windowId}">Ready</div>
                 </div>
                 <div class="app-installer-list-container">
@@ -2002,6 +2008,7 @@
         const chooseFileBtn = contentEl.querySelector(`#installer-choose-file-${windowId}`);
         const openLibraryBtn = contentEl.querySelector(`#installer-open-library-${windowId}`);
         const statusEl = contentEl.querySelector(`#installer-status-${windowId}`);
+        const dropzone = contentEl.querySelector(`#installer-dropzone-${windowId}`);
         const customAppListUl = contentEl.querySelector(`#installer-custom-app-list-${windowId}`);
         const appInstallerAppEl = contentEl.querySelector('.app-installer-app');
 
@@ -2102,6 +2109,19 @@
             };
             appFileInput.addEventListener('change', fileInputHandler);
             appFileInput.click();
+        });
+        ['dragenter', 'dragover'].forEach(eventName => dropzone.addEventListener(eventName, (event) => {
+            event.preventDefault(); event.stopPropagation(); dropzone.classList.add('drag-over'); statusEl.textContent = 'Drop the .js file to install it.';
+        }));
+        ['dragleave', 'drop'].forEach(eventName => dropzone.addEventListener(eventName, (event) => {
+            event.preventDefault(); event.stopPropagation(); dropzone.classList.remove('drag-over');
+        }));
+        dropzone.addEventListener('drop', (event) => {
+            const file = event.dataTransfer?.files?.[0];
+            if (file) handleInstallFile(file); else statusEl.textContent = 'No file dropped.';
+        });
+        dropzone.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); chooseFileBtn.click(); }
         });
 
         openLibraryBtn.addEventListener('click', async () => {
@@ -2313,13 +2333,12 @@
             }
 
             function checkLockState() {
-                createLockScreenElements(); createWelcomeScreenElement();
-                const storedHash = localStorage.getItem(PASSWORD_HASH_KEY);
-                const skippedSetup = localStorage.getItem(PASSWORD_SETUP_SKIPPED_KEY) === 'true';
-                lockScreenOverlay.classList.remove('hidden');
-                if (storedHash) { loginScreen.classList.remove('hidden'); passwordSetupScreen.classList.add('hidden'); setTimeout(() => document.getElementById('login-password')?.focus(), 0); }
-                else if (skippedSetup) { unlockOS(); }
-                else { passwordSetupScreen.classList.remove('hidden'); loginScreen.classList.add('hidden'); setTimeout(() => document.getElementById('new-password')?.focus(), 0); }
+                // The lock screen is a demonstration only, so Simplex OS starts directly.
+                // Remove legacy credentials so an older installation cannot block access.
+                localStorage.removeItem(PASSWORD_HASH_KEY);
+                localStorage.removeItem(PASSWORD_SETUP_SKIPPED_KEY);
+                createWelcomeScreenElement();
+                unlockOS();
             }
 
             // --- Custom Context Menu ---
@@ -2595,7 +2614,49 @@
             function updateClock() { const now = new Date(); const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); const dateString = now.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' }); clockElement.innerHTML = `${timeString}<br>${dateString}`; }
 
             // --- Desktop Shortcut Functions ---
-            function createDesktopIconElement(appId, name, iconHtml) { const iconEl = document.createElement('div'); iconEl.className = 'desktop-icon'; iconEl.dataset.app = appId; iconEl.title = `Open ${name}`; iconEl.innerHTML = `${iconHtml} <span>${name}</span>`; desktop.appendChild(iconEl); return iconEl; }
+            function createDesktopIconElement(appId, name, iconHtml) {
+                const iconEl = document.createElement('div');
+                iconEl.className = 'desktop-icon'; iconEl.dataset.app = appId; iconEl.title = `Open ${name}`;
+                iconEl.innerHTML = `${iconHtml} <span>${name}</span>`; desktop.appendChild(iconEl);
+                const saved = desktopIconPositions[appId];
+                const index = desktop.querySelectorAll('.desktop-icon').length - 1;
+                const columns = Math.max(1, Math.floor((desktop.clientWidth - 30) / 90));
+                const left = saved && Number.isFinite(saved.left) ? 15 + Math.round((saved.left - 15) / 90) * 90 : 15 + (index % columns) * 90;
+                const top = saved && Number.isFinite(saved.top) ? 15 + Math.round((saved.top - 15) / 100) * 100 : 15 + Math.floor(index / columns) * 100;
+                iconEl.style.left = `${left}px`; iconEl.style.top = `${top}px`;
+                enableDesktopIconDragging(iconEl);
+                return iconEl;
+            }
+            function saveDesktopIconPositions() {
+                try { localStorage.setItem(DESKTOP_ICON_POSITIONS_KEY, JSON.stringify(desktopIconPositions)); } catch (e) { console.error('Save icon positions err:', e); }
+            }
+            function enableDesktopIconDragging(iconEl) {
+                let pointerId = null, startX = 0, startY = 0, startLeft = 0, startTop = 0, moved = false;
+                const gridX = 90, gridY = 100, gridOrigin = 15;
+                iconEl.addEventListener('pointerdown', (e) => {
+                    if (e.button !== 0) return;
+                    pointerId = e.pointerId; moved = false;
+                    const iconRect = iconEl.getBoundingClientRect(); const desktopRect = desktop.getBoundingClientRect();
+                    startX = e.clientX; startY = e.clientY; startLeft = iconRect.left - desktopRect.left; startTop = iconRect.top - desktopRect.top;
+                    iconEl.setPointerCapture(pointerId); iconEl.style.zIndex = '2';
+                });
+                iconEl.addEventListener('pointermove', (e) => {
+                    if (e.pointerId !== pointerId) return;
+                    const dx = e.clientX - startX, dy = e.clientY - startY;
+                    if (!moved && Math.hypot(dx, dy) < 5) return;
+                    moved = true; const desktopRect = desktop.getBoundingClientRect();
+                    const maxLeft = Math.max(15, desktopRect.width - iconEl.offsetWidth - 15); const maxTop = Math.max(15, desktopRect.height - iconEl.offsetHeight - 15);
+                    const rawLeft = Math.max(15, Math.min(maxLeft, startLeft + dx));
+                    const rawTop = Math.max(15, Math.min(maxTop, startTop + dy));
+                    iconEl.style.left = `${Math.max(gridOrigin, Math.min(maxLeft, gridOrigin + Math.round((rawLeft - gridOrigin) / gridX) * gridX))}px`;
+                    iconEl.style.top = `${Math.max(gridOrigin, Math.min(maxTop, gridOrigin + Math.round((rawTop - gridOrigin) / gridY) * gridY))}px`;
+                });
+                iconEl.addEventListener('pointerup', (e) => {
+                    if (e.pointerId !== pointerId) return;
+                    if (moved) { desktopIconPositions[iconEl.dataset.app] = { left: parseFloat(iconEl.style.left), top: parseFloat(iconEl.style.top) }; saveDesktopIconPositions(); }
+                    pointerId = null; iconEl.style.zIndex = '1';
+                });
+            }
             function addShortcutToDesktop(appId) { if (!apps[appId] || desktopShortcuts.includes(appId)) return; const appConfig = apps[appId]; createDesktopIconElement(appId, appConfig.name, getIconHtml(appConfig)); desktopShortcuts.push(appId); saveDesktopShortcuts(); populateAppList(); }
             function removeDesktopShortcut(appId) { const index = desktopShortcuts.indexOf(appId); if (index > -1) { desktopShortcuts.splice(index, 1); const iconEl = desktop.querySelector(`.desktop-icon[data-app="${appId}"]`); if (iconEl) iconEl.remove(); saveDesktopShortcuts(); populateAppList(); } }
             function loadDesktopShortcuts() { desktop.innerHTML = ''; const stored = localStorage.getItem(DESKTOP_SHORTCUTS_KEY); let loaded = []; if (stored) { try { const ids = JSON.parse(stored); if (Array.isArray(ids)) { ids.forEach(id => { const cfg = apps[id]; if (cfg) { createDesktopIconElement(id, cfg.name, getIconHtml(cfg)); loaded.push(id); } else console.warn(`Shortcut app ${id} not found.`); }); } } catch (e) { console.error("Load shortcuts err:", e); localStorage.removeItem(DESKTOP_SHORTCUTS_KEY); }} if (loaded.length === 0 && Object.keys(apps).length > 0) { const defaults = ['AppInstaller', 'NotesApp', 'Settings', 'Browser', 'MediaPlayer', 'Paint', 'Calculator', 'ImageViewer', 'ClockApp', 'TextPad', 'SoundRecorder', 'VideoRecorder']; defaults.forEach(id => { if (apps[id] && !loaded.includes(id)) { const cfg=apps[id]; createDesktopIconElement(id, cfg.name, getIconHtml(cfg)); loaded.push(id); }}); if (loaded.length > 0) { desktopShortcuts = loaded; saveDesktopShortcuts(); }} else { desktopShortcuts = loaded; if (stored && JSON.parse(stored).length !== loaded.length) saveDesktopShortcuts(); } }
@@ -2799,6 +2860,8 @@
                 loadInstalledApps(); 
                 loadAndApplyInitialSettings(); 
                 loadAndApplyStartMenuView(); 
+                const storedIconPositions = localStorage.getItem(DESKTOP_ICON_POSITIONS_KEY);
+                if (storedIconPositions) { try { desktopIconPositions = JSON.parse(storedIconPositions) || {}; } catch (e) { desktopIconPositions = {}; localStorage.removeItem(DESKTOP_ICON_POSITIONS_KEY); } }
                 loadDesktopShortcuts(); 
                 loadDesktopWidgets(); 
                 populateAppList(); 

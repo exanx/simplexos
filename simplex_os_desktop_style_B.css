@@ -270,6 +270,8 @@ a.button-like i.fa-regular:only-child {
 /* ========================================================================== */
 #desktop {
     position: relative;
+    width: 100%;
+    box-sizing: border-box;
     height: calc(100vh - 40px);
     background: var(--bg-desktop);
     background-size: cover;
@@ -285,7 +287,7 @@ a.button-like i.fa-regular:only-child {
 }
 
 .desktop-icon {
-    position: relative;
+    position: absolute;
     z-index: 1;
     color: var(--text-desktop-icons);
     text-shadow: 1px 1px 2px var(--shadow-desktop-icon);
@@ -806,11 +808,14 @@ body:not(.animations-disabled) #start-menu {
 /* ========================================================================== */
 .window {
     position: absolute;
+    box-sizing: border-box;
     background-color: var(--bg-primary);
     border: 1px solid var(--border-primary);
     box-shadow: 3px 3px 10px var(--shadow-primary);
     min-width: 200px;
     min-height: 150px;
+    max-width: 100%;
+    max-height: 100%;
     display: flex;
     flex-direction: column;
     overflow: hidden; /* Important for content and resize */
@@ -2353,6 +2358,28 @@ input[type=range].progress-bar { color: var(--accent-primary); /* For some brows
 }
 .app-installer-header button:not(:first-of-type):hover { /* "Choose .js file" button */
     background-color: var(--app-installer-button-hover);
+}
+.app-installer-dropzone {
+    border: 2px dashed var(--border-primary);
+    border-radius: 6px;
+    margin: 10px auto 0;
+    padding: 12px 10px;
+    max-width: 300px;
+    color: var(--app-installer-status);
+    cursor: copy;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+.app-installer-dropzone i { font-size: 1.4em; }
+.app-installer-dropzone:hover,
+.app-installer-dropzone:focus-visible,
+.app-installer-dropzone.drag-over {
+    background-color: var(--app-installer-button-hover);
+    border-color: var(--accent-primary);
+    outline: none;
 }
 .app-installer-header .status {
     font-style: italic;
