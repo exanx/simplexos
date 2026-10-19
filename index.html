@@ -184,6 +184,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            const chooseFileManagerPath = async (defaultName, excludedPath = '') => { const req = indexedDB.open('simplexos-file-manager', 2); const all = await new Promise((resolve, reject) => { req.onupgradeneeded = () => { if (!req.result.objectStoreNames.contains('entries')) req.result.createObjectStore('entries', {keyPath: 'path'}); }; req.onsuccess = () => { const get = req.result.transaction('entries', 'readonly').objectStore('entries').getAll(); get.onsuccess = () => resolve(get.result); get.onerror = () => reject(get.error); }; req.onerror = () => reject(req.error); }); const folders = ['', ...all.filter(e => e.kind === 'directory' && (!excludedPath || (e.path !== excludedPath && !e.path.startsWith(excludedPath)))).map(e => e.path)]; return await new Promise(resolve => { const overlay = document.createElement('div'); overlay.style.cssText = 'position:fixed;inset:0;background:#0008;z-index:99999;display:flex;align-items:center;justify-content:center'; overlay.innerHTML = `<div style="background:var(--bg-secondary,#222);color:var(--text-primary,#fff);padding:20px;border:1px solid var(--border-primary,#555);border-radius:8px;min-width:320px"><h3>Save in File Manager</h3><label>Folder</label><select id="fm-choice-folder" style="width:100%;margin:8px 0;padding:8px">${folders.map(folder => `<option value="${folder}">${folder || 'Root'}</option>`).join('')}</select><label>File name</label><input id="fm-choice-name" value="${defaultName}" style="width:100%;margin:8px 0;padding:8px"><div style="display:flex;justify-content:flex-end;gap:8px;margin-top:12px"><button id="fm-choice-cancel">Cancel</button><button id="fm-choice-save">Save</button></div></div>`; document.body.appendChild(overlay); const finish = value => { overlay.remove(); resolve(value); }; overlay.querySelector('#fm-choice-cancel').onclick = () => finish(null); overlay.querySelector('#fm-choice-save').onclick = () => { const folder = overlay.querySelector('#fm-choice-folder').value; const name = overlay.querySelector('#fm-choice-name').value.trim(); finish(name ? `${folder}${name}` : null); }; }); };
             // --- Element References ---
             const desktop = document.getElementById('desktop');
             const taskbar = document.getElementById('taskbar');
@@ -709,7 +710,7 @@
                     // Added font family selector to the toolbar
                     contentEl.innerHTML = `<div class="textpad-app">
                         <div class="textpad-toolbar">
-                            <button id="textpad-save-${windowId}" title="Save As..."><i class="fa-solid fa-save"></i> Save</button>
+                            <button id="textpad-save-${windowId}" title="Save"><i class="fa-solid fa-save"></i> Save</button><button id="textpad-save-in-${windowId}" title="Save In"><i class="fa-solid fa-file-export"></i> Save In</button>
                             <div class="separator"></div>
                             <label for="textpad-font-family-${windowId}" style="margin: 0 4px 0 8px; font-size: 0.9em;">Font:</label>
                             <select id="textpad-font-family-${windowId}" title="Change Font Family" style="padding: 4px 6px; border-radius: 3px; border: 1px solid var(--border-primary); background-color: var(--paint-toolbar-button-bg); color: var(--paint-toolbar-text); cursor: pointer; max-width: 150px; font-size: 0.9em;"></select>
@@ -725,10 +726,15 @@
 
                     const textarea = contentEl.querySelector(`#textpad-textarea-${windowId}`);
                     const saveButton = contentEl.querySelector(`#textpad-save-${windowId}`);
+                    const saveInButton = contentEl.querySelector(`#textpad-save-in-${windowId}`);
+                    let savedFilePath = null;
+                    let textPadDirty = false;
                     const fontIncButton = contentEl.querySelector(`#textpad-font-inc-${windowId}`);
                     const fontDecButton = contentEl.querySelector(`#textpad-font-dec-${windowId}`);
                     const fontSizeIndicator = contentEl.querySelector(`#textpad-font-size-indicator-${windowId}`);
                     const fontFamilySelect = contentEl.querySelector(`#textpad-font-family-${windowId}`);
+                    const managedFileHandler = async (event) => { const file = event.detail?.file; if (event.detail?.target !== 'TextPad' || !file) return; textarea.value = await file.text(); textPadDirty = false; };
+                    window.addEventListener('simplexos-open-file', managedFileHandler);
 
                     const TEXTPAD_STYLE_KEY = 'textpad_style_v1';
                     const FONT_FAMILIES = [
@@ -811,20 +817,14 @@
                         saveStyle();
                     });
 
-                    saveButton.addEventListener('click', async () => {
-                        const textContent = textarea.value;
-                        const defaultFilename = "textpad_content.txt";
-                         const filename = await showOSDialog({ // Assuming showOSDialog is globally available
-                            title: 'Save Text File', message: 'Save file as:', type: 'prompt', defaultValue: defaultFilename,
-                            buttons: [ { label: 'Cancel', value: null }, { label: 'Save', value: true, class: 'success' } ]
-                        });
-                        if (filename === null || filename.trim() === "") return;
-                        const blob = new Blob([textContent], { type: 'text/plain;charset=utf-8' });
-                        const url = URL.createObjectURL(blob);
-                        const a = document.createElement('a'); a.href = url; a.download = filename.endsWith('.txt') ? filename : filename + '.txt';
-                        a.style.display = 'none'; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
-                    });
+                    const saveTextFile = async (saveAs = false) => { let path = saveAs ? null : savedFilePath; if (!path) { path = await chooseFileManagerPath('textpad_content.txt'); if (!path) return; if (!path.toLowerCase().endsWith('.txt')) path += '.txt'; } const req = indexedDB.open('simplexos-file-manager', 2); req.onupgradeneeded = () => { if (!req.result.objectStoreNames.contains('entries')) req.result.createObjectStore('entries', {keyPath: 'path'}); }; req.onsuccess = () => { const db = req.result, tx = db.transaction('entries', 'readwrite'); tx.objectStore('entries').put({path, name: path.split('/').pop(), kind: 'file', data: new Blob([textarea.value], {type: 'text/plain;charset=utf-8'})}); tx.oncomplete = () => { db.close(); savedFilePath = path; showOSAlert(`Saved in File Manager as ${path}`, 'Text Saved'); }; tx.onerror = () => showOSAlert('Could not save the text file.', 'Save Error'); }; };
+                    textarea.addEventListener('input', () => { textPadDirty = true; });
+                    saveButton.addEventListener('click', async () => { await saveTextFile(false); textPadDirty = false; });
+                    saveInButton.addEventListener('click', async () => { await saveTextFile(true); textPadDirty = false; });
 
+                    const textPadBeforeUnload = (event) => { if (textPadDirty) { event.preventDefault(); event.returnValue = ''; } };
+                    window.addEventListener('beforeunload', textPadBeforeUnload);
+                    if (openWindows[windowId]) { openWindows[windowId].cleanup = () => { if (textPadDirty && !confirm('Text Pad has unsaved changes. Close without saving?')) return false; window.removeEventListener('simplexos-open-file', managedFileHandler); window.removeEventListener('beforeunload', textPadBeforeUnload); }; }
                     // Load and apply initial style
                     loadStyle();
                  } },
@@ -1246,6 +1246,8 @@
                     const resetView = (fit = true) => { viewState = { zoom: 1, panX: 0, panY: 0, rotation: 0, flipH: false, flipV: false }; if (fit) fitToWindow(); else draw(); updateUI(); };
                     const fitToWindow = () => { if (!isImageLoaded || !currentImageBitmap || currentImageBitmap.width === 0 || currentImageBitmap.height === 0) return; const { width: containerWidth, height: containerHeight } = contentArea.getBoundingClientRect(); if (containerWidth === 0 || containerHeight === 0) return; const imgAspectRatio = currentImageBitmap.width / currentImageBitmap.height; const containerAspectRatio = containerWidth / containerHeight; let newZoom = (imgAspectRatio > containerAspectRatio) ? (containerWidth / currentImageBitmap.width) : (containerHeight / currentImageBitmap.height); viewState.zoom = Math.max(0.1, Math.min(10, newZoom)); viewState.panX = (containerWidth - currentImageBitmap.width * viewState.zoom) / 2; viewState.panY = (containerHeight - currentImageBitmap.height * viewState.zoom) / 2; draw(); updateUI(); };
                     const handleFileOpen = async (file) => { if (!file?.type.startsWith('image/')) { showOSAlert("Please select a valid image file.", "Invalid File"); return; } filename = file.name; const url = URL.createObjectURL(file); const img = new Image(); img.onload = async () => { try { originalImage = await createImageBitmap(img); currentImageBitmap = await createImageBitmap(img); isImageLoaded = true; resetView(true); resetFilters(); } catch(e) { console.error("Error creating ImageBitmap:", e); showOSAlert("Could not process the image. It might be in an unsupported format or corrupted.", "Image Error"); } finally { URL.revokeObjectURL(url); } }; img.onerror = () => { showOSAlert("Failed to load the image.", "Load Error"); URL.revokeObjectURL(url); }; img.src = url; };
+                    const managedFileHandler = (event) => { if (event.detail?.target === 'ImageViewer' && event.detail.file) handleFileOpen(event.detail.file); };
+                    window.addEventListener('simplexos-open-file', managedFileHandler);
                     openBtn.addEventListener('click', () => { imageFileInput.onchange = (e) => handleFileOpen(e.target.files?.[0]); imageFileInput.click(); });
                     saveBtn.addEventListener('click', async () => { if(!isImageLoaded) return; const newFilename = await showOSDialog({ title: 'Save Image', message: 'Save file as:', type: 'prompt', defaultValue: filename, buttons: [ { label: 'Cancel', value: null }, { label: 'Save', value: true, class: 'success' } ] }); if (newFilename === null || newFilename.trim() === '') return; const tempCanvas = document.createElement('canvas'); const tempCtx = tempCanvas.getContext('2d'); tempCanvas.width = currentImageBitmap.width; tempCanvas.height = currentImageBitmap.height; tempCtx.save(); tempCtx.translate(tempCanvas.width/2, tempCanvas.height/2); tempCtx.rotate(viewState.rotation * Math.PI / 180); tempCtx.scale(viewState.flipH ? -1 : 1, viewState.flipV ? -1 : 1); tempCtx.translate(-tempCanvas.width/2, -tempCanvas.height/2); tempCtx.filter = `brightness(${filters.brightness}%) contrast(${filters.contrast}%) saturate(${filters.saturate}%) hue-rotate(${filters.hue}deg)`; tempCtx.drawImage(currentImageBitmap, 0, 0); tempCtx.restore(); tempCanvas.toBlob((blob) => { const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = newFilename; a.click(); URL.revokeObjectURL(url); }, 'image/png'); });
                     zoomInBtn.addEventListener('click', () => { viewState.zoom = Math.min(10, viewState.zoom * 1.2); draw(); updateUI(); });
@@ -1269,7 +1271,7 @@
                     function handleCropEnd() { isDraggingCrop = false; }
                     async function applyCrop() { if (!cropRect || !isImageLoaded) return; const cropX = Math.min(cropRect.startX, cropRect.endX); const cropY = Math.min(cropRect.startY, cropRect.endY); const cropW = Math.abs(cropRect.startX - cropRect.endX); const cropH = Math.abs(cropRect.startY - cropRect.endY); if (cropW < 1 || cropH < 1) { deactivateAllTools(); return; } const finalCropCanvas = document.createElement('canvas'); finalCropCanvas.width = cropW; finalCropCanvas.height = cropH; const ctx = finalCropCanvas.getContext('2d'); ctx.translate(-cropX, -cropY); ctx.translate(viewState.panX, viewState.panY); ctx.scale(viewState.zoom, viewState.zoom); ctx.translate(currentImageBitmap.width / 2, currentImageBitmap.height / 2); ctx.rotate(viewState.rotation * Math.PI / 180); ctx.scale(viewState.flipH ? -1 : 1, viewState.flipV ? -1 : 1); ctx.translate(-currentImageBitmap.width / 2, -currentImageBitmap.height / 2); ctx.filter = `brightness(${filters.brightness}%) contrast(${filters.contrast}%) saturate(${filters.saturate}%) hue-rotate(${filters.hue}deg)`; ctx.drawImage(currentImageBitmap, 0, 0); try { const newCroppedBitmap = await createImageBitmap(finalCropCanvas); applyPermanentChanges(newCroppedBitmap); } catch (e) { console.error("Error creating cropped bitmap:", e); showOSAlert("Could not apply crop. The resulting image might be empty or too complex.", "Crop Error"); } finally { cropRect = null; } }
                     if (typeof ResizeObserver !== 'undefined') { resizeObserver = new ResizeObserver(resizeAll); resizeObserver.observe(contentArea); }
-                    if (openWindows[windowId]) { openWindows[windowId].cleanup = () => { if (resizeObserver) resizeObserver.disconnect(); }; }
+                    if (openWindows[windowId]) { openWindows[windowId].cleanup = () => { window.removeEventListener('simplexos-open-file', managedFileHandler); if (resizeObserver) resizeObserver.disconnect(); }; }
                     updateUI();
                  } },
 				 
@@ -1277,6 +1279,7 @@
 				 //PART 2
 				 
 
+                <!-- -----------------------------------------------------------------------------
                 <!-- -----------------------------------------------------------------------------
                 <!-- --- MediaPlayer App (FINAL - YouTube & Visualizers Fixed) ---
                 <!-- -----------------------------------------------------------------------------
@@ -1473,8 +1476,10 @@
                         canvas.addEventListener('click', () => { currentVisualizerIndex = (currentVisualizerIndex + 1) % visualizers.length; });
                         
                         // --- Initialization & Cleanup ---
+                        const managedFileHandler = (event) => { const file = event.detail?.file; if (event.detail?.target !== 'MediaPlayer' || !file) return; const item = { name: file.name, type: file.type || 'application/octet-stream', url: URL.createObjectURL(file), isUrl: false }; playlist.push(item); renderPlaylist(); playTrack(playlist.length - 1, true); };
+                        window.addEventListener('simplexos-open-file', managedFileHandler);
                         updateVolumeIcon(); resetMediaPlayerState(true);
-                        if (openWindows[windowId]) { openWindows[windowId].cleanup = () => { resetMediaPlayerState(true); if (audioCtx && audioCtx.state !== 'closed') { audioCtx.close(); audioCtx = null; } analyser = null; document.removeEventListener('fullscreenchange', updateFullscreenButton); }; }
+                        if (openWindows[windowId]) { openWindows[windowId].cleanup = () => { window.removeEventListener('simplexos-open-file', managedFileHandler); resetMediaPlayerState(true); if (audioCtx && audioCtx.state !== 'closed') { audioCtx.close(); audioCtx = null; } analyser = null; document.removeEventListener('fullscreenchange', updateFullscreenButton); }; }
                     }
                 },                
 				
@@ -1790,6 +1795,8 @@
                     <button data-command="createLink" title="Add Link"><i class="fa-solid fa-link"></i></button>
                     <button data-command="removeFormat" title="Clear Formatting"><i class="fa-solid fa-text-slash"></i></button>
                     <div class="separator" style="margin-left: auto;"></div>
+                    <button id="${appPrefix}-save" title="Save"><i class="fa-solid fa-save"></i> Save</button>
+                    <button id="${appPrefix}-save-in" title="Save In"><i class="fa-solid fa-file-export"></i> Save In</button>
                     <button id="${appPrefix}-export-txt" title="Export as Text File (.txt)" disabled><i class="fa-solid fa-file-alt"></i></button>
                     <button id="${appPrefix}-export-html" title="Export as HTML File (.html)" disabled><i class="fa-solid fa-file-code"></i></button>
                 </div>
@@ -1816,11 +1823,16 @@
         const notesRestoreInput = document.getElementById('notes-restore-input');
         const exportTxtBtn = contentEl.querySelector(`#${appPrefix}-export-txt`);
         const exportHtmlBtn = contentEl.querySelector(`#${appPrefix}-export-html`);
+        const saveBtn = contentEl.querySelector(`#${appPrefix}-save`);
+        const saveInBtn = contentEl.querySelector(`#${appPrefix}-save-in`);
 
         // --- State Variables ---
         let notes = [];
         let currentNoteId = null;
         let saveTimeout = null;
+        let hasUnsavedChanges = false;
+        const managedFileHandler = async (event) => { if (event.detail?.target !== 'NotesApp' || !event.detail.file) return; const file = event.detail.file; const path = event.detail.path || null; const html = await file.text(); const doc = new DOMParser().parseFromString(html, 'text/html'); const existing = path ? notes.find(note => note.filePath === path) : null; if (existing) { const index = notes.indexOf(existing); existing.title = doc.querySelector('title')?.textContent || existing.title || file.name.replace(/\.html?$/i, ''); existing.body = doc.body?.innerHTML || html; existing.lastModified = Date.now(); hasUnsavedChanges = false; selectNote(existing.id); if (index > -1) notes.splice(index, 1, existing); saveNotes(false); return; } const now = Date.now(); const note = {id: now, createdAt: now, title: doc.querySelector('title')?.textContent || file.name.replace(/\.html?$/i, ''), body: doc.body?.innerHTML || html, lastModified: now, filePath: path}; notes.unshift(note); hasUnsavedChanges = false; selectNote(note.id); saveNotes(false); };
+        window.addEventListener('simplexos-open-file', managedFileHandler);
 
         // --- Helper Functions ---
         const formatDate = (timestamp) => { try { const d = new Date(timestamp); const now = new Date(); if (d.toDateString() === now.toDateString()) return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); return d.toLocaleDateString(); } catch { return '...'; } };
@@ -1880,7 +1892,7 @@
                 showOSAlert("Failed to save notes. Storage may be full.", "Save Error");
             }
         };
-        const scheduleSave = () => { clearTimeout(saveTimeout); saveTimeout = setTimeout(() => saveNotes(true), 1000); };
+        const scheduleSave = () => { hasUnsavedChanges = true; };
         const renderNoteList = () => {
             notesListEl.innerHTML = '';
             notes.sort((a, b) => (b.lastModified || 0) - (a.lastModified || 0));
@@ -1890,7 +1902,7 @@
             noteCountEl.textContent = `Notes: ${notes.length}${query ? ` (found ${filtered.length})` : ''}`;
         };
         const selectNote = (id) => {
-            if (saveTimeout) { clearTimeout(saveTimeout); saveNotes(true); }
+            if (hasUnsavedChanges && !confirm('This note has unsaved changes. Discard them?')) return;
             if (!id && notes.length > 0) id = notes[0].id;
             if (!id) {
                 editorEl.innerHTML = ''; editorEl.contentEditable = false;
@@ -1918,13 +1930,15 @@
             const newNote = { id: now, createdAt: now, title: 'New Note', body: '<p>Start writing here...</p>', lastModified: now };
             notes.unshift(newNote);
             selectNote(newNote.id);
-            saveNotes();
+            renderNoteList();
             titleInputEl.focus(); // Focus the new title input
         };
-        const deleteNote = async (id) => { if (await showOSConfirmDanger('Permanently delete this note?')) { notes = notes.filter(n => n.id !== id); if (currentNoteId === id) { currentNoteId = null; selectNote(); } saveNotes(); } };
+        const deleteNote = async (id) => { if (await showOSConfirmDanger('Permanently delete this note?')) { const note = notes.find(n => n.id === id); if (note?.filePath) { await fileManagerDbRequest('readwrite', store => store.delete(note.filePath)); window.dispatchEvent(new Event('simplexos-file-manager-changed')); } notes = notes.filter(n => n.id !== id); hasUnsavedChanges = false; if (currentNoteId === id) { currentNoteId = null; selectNote(); } localStorage.setItem(NOTES_STORAGE_KEY, JSON.stringify(notes)); renderNoteList(); } };
         const handleLinkCreation = async () => { editorEl.focus(); const selection = window.getSelection(); if (!selection || selection.rangeCount === 0) return; const range = selection.getRangeAt(0); const selectedText = selection.toString(); const url = await showOSPrompt('Enter the full URL:', 'Create Link', selectedText.startsWith('http') ? selectedText : 'https://'); if (!url) return; selection.removeAllRanges(); selection.addRange(range); document.execCommand('createLink', false, url); const parentElement = selection.anchorNode.parentElement; if (parentElement && parentElement.tagName === 'A') { parentElement.target = '_blank'; parentElement.rel = 'noopener noreferrer'; } scheduleSave(); };
 
         // --- Export, Backup, Restore, and Clear ---
+        const fileManagerDbRequest = (mode, action) => new Promise((resolve, reject) => { const req = indexedDB.open('simplexos-file-manager', 2); req.onupgradeneeded = () => { if (!req.result.objectStoreNames.contains('entries')) req.result.createObjectStore('entries', {keyPath: 'path'}); }; req.onsuccess = () => { const db = req.result; const tx = db.transaction('entries', mode); const result = action(tx.objectStore('entries')); tx.oncomplete = () => { db.close(); resolve(result); }; tx.onerror = () => reject(tx.error); }; req.onerror = () => reject(req.error); });
+        const saveNoteToFileManager = async (saveAs = false) => { if (!currentNoteId) return; const note = notes.find(n => n.id === currentNoteId); if (!note) return; saveNotes(false); let path = saveAs ? null : note.filePath; if (!path) { const defaultName = `${(note.title || 'Untitled Note').replace(/[<>:"/\\|?*]/g, '_')}.html`; const filename = await chooseFileManagerPath(defaultName); if (!filename) return; path = filename; if (!path.toLowerCase().endsWith('.html')) path += '.html'; } const content = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${note.title}</title></head><body><h1>${note.title}</h1>${note.body}</body></html>`; await fileManagerDbRequest('readwrite', store => store.put({path, name: path.split('/').pop(), kind: 'file', data: new Blob([content], {type: 'text/html;charset=utf-8'})})); note.filePath = path; note.lastModified = Date.now(); saveNotes(true); showOSAlert(`Saved in File Manager as ${path}`, 'Note Saved'); };
         const handleExport = async (format) => {
             if (!currentNoteId) return;
             const note = notes.find(n => n.id === currentNoteId);
@@ -1951,15 +1965,15 @@
         };
         const handleBackup = () => { if (notes.length === 0) { showOSAlert("There are no notes to backup.", "Backup"); return; } const dataStr = JSON.stringify(notes, null, 2); const blob = new Blob([dataStr], { type: 'application/json' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `simplex-os-notes-backup-${new Date().toISOString().slice(0, 10)}.json`; a.click(); URL.revokeObjectURL(url); };
         const handleRestore = async () => { if (!(await showOSConfirmDanger("Restoring from a backup will OVERWRITE all current notes. Continue?", "Restore Warning"))) return; const restoreFileHandler = (event) => { const file = event.target.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = async (e) => { try { const restoredNotes = JSON.parse(e.target.result); if (!Array.isArray(restoredNotes) || (restoredNotes.length > 0 && (!restoredNotes[0].id || !restoredNotes[0].hasOwnProperty('title')))) { throw new Error("Invalid notes backup file format. Must contain 'title' property."); } notes = restoredNotes; saveNotes(false); loadNotes(); await showOSAlert("Notes have been restored successfully.", "Restore Complete"); } catch (err) { await showOSAlert(`Restore failed: ${err.message}`, "Restore Error"); } }; reader.onerror = () => showOSAlert("Failed to read the backup file.", "File Error"); reader.readAsText(file); notesRestoreInput.removeEventListener('change', restoreFileHandler); notesRestoreInput.value = null; }; notesRestoreInput.addEventListener('change', restoreFileHandler, { once: true }); notesRestoreInput.click(); };
-        const handleClearAll = async () => { if (notes.length === 0) { showOSAlert("There are no notes to clear.", "Clear All"); return; } if (await showOSConfirmDanger("This will permanently delete ALL notes. This action cannot be undone. Are you sure?", "Clear All Notes")) { notes = []; currentNoteId = null; saveNotes(false); selectNote(null); await showOSAlert("All notes have been cleared.", "Success"); } };
+        const handleClearAll = async () => { if (notes.length === 0) { showOSAlert("There are no notes to clear.", "Clear All"); return; } if (await showOSConfirmDanger("This will permanently delete ALL notes. This action cannot be undone. Are you sure?", "Clear All Notes")) { const linkedPaths = notes.map(note => note.filePath).filter(Boolean); if (linkedPaths.length) { await fileManagerDbRequest('readwrite', store => linkedPaths.forEach(path => store.delete(path))); window.dispatchEvent(new Event('simplexos-file-manager-changed')); } notes = []; currentNoteId = null; hasUnsavedChanges = false; saveNotes(false); selectNote(null); await showOSAlert("All notes and their associated files have been cleared.", "Clear All"); } };
 
         // --- Event Listeners ---
         toolbarEl.addEventListener('click', (e) => { const button = e.target.closest('button[data-command]'); if (!button || !editorEl.isContentEditable) return; const cmd = button.dataset.command; if (cmd === 'createLink') { handleLinkCreation(); } else { document.execCommand(cmd, false, button.dataset.value || null); scheduleSave(); } });
         editorEl.addEventListener('click', async (e) => { if (e.target.tagName === 'A' && e.target.href) { e.preventDefault(); if (await showOSConfirm(`Open this link in a new tab?\n\n${e.target.href}`, 'Open External Link')) window.open(e.target.href, '_blank', 'noopener,noreferrer'); } });
         editorEl.addEventListener('input', scheduleSave);
         titleInputEl.addEventListener('input', scheduleSave);
-        editorEl.addEventListener('blur', () => { if (saveTimeout) { clearTimeout(saveTimeout); saveNotes(true); } });
-        titleInputEl.addEventListener('blur', () => { if (saveTimeout) { clearTimeout(saveTimeout); saveNotes(true); } });
+        editorEl.addEventListener('blur', () => {});
+        titleInputEl.addEventListener('blur', () => {});
         searchInput.addEventListener('input', renderNoteList);
         addNoteBtn.addEventListener('click', addNewNote);
         backupBtn.addEventListener('click', handleBackup);
@@ -1967,15 +1981,59 @@
         clearAllBtn.addEventListener('click', handleClearAll);
         exportTxtBtn.addEventListener('click', () => handleExport('txt'));
         exportHtmlBtn.addEventListener('click', () => handleExport('html'));
+        saveBtn.addEventListener('click', async () => { await saveNoteToFileManager(false); hasUnsavedChanges = false; window.dispatchEvent(new Event('simplexos-file-manager-changed')); });
+        saveInBtn.addEventListener('click', async () => { await saveNoteToFileManager(true); hasUnsavedChanges = false; window.dispatchEvent(new Event('simplexos-file-manager-changed')); });
 
         // --- Initialization & Cleanup ---
         loadNotes();
-        if (openWindows[windowId]) { openWindows[windowId].cleanup = () => { clearTimeout(saveTimeout); if (currentNoteId) saveNotes(false); }; }
+        const notesBeforeUnload = (event) => { if (hasUnsavedChanges) { event.preventDefault(); event.returnValue = ''; } };
+        window.addEventListener('beforeunload', notesBeforeUnload);
+        if (openWindows[windowId]) { openWindows[windowId].cleanup = () => { if (hasUnsavedChanges && !confirm('This note has unsaved changes. Close without saving?')) return false; clearTimeout(saveTimeout); window.removeEventListener('simplexos-open-file', managedFileHandler); window.removeEventListener('beforeunload', notesBeforeUnload); }; }
     }
 },
                 <!-- -----------------------------------------------------------------------------
                 <!-- --- AppInstaller App ---
                 <!-- -----------------------------------------------------------------------------
+                 'FileManager': {
+    name: 'File Manager', icon: '<i class="fa-solid fa-folder-open"></i>', isCustom: false,
+    init: (contentEl, windowId) => {
+        contentEl.style.padding = '0';
+        contentEl.innerHTML = `<div class="file-manager"><div class="file-manager-toolbar"><button id="fm-pick-${windowId}"><i class="fa-solid fa-folder-open"></i> Choose folder</button><button id="fm-upload-${windowId}" disabled><i class="fa-solid fa-upload"></i> Upload</button><button id="fm-new-folder-${windowId}" disabled><i class="fa-solid fa-folder-plus"></i> New folder</button><button id="fm-new-file-${windowId}" disabled><i class="fa-solid fa-file-circle-plus"></i> New file</button><input id="fm-input-${windowId}" type="file" multiple hidden><span id="fm-status-${windowId}">Choose a folder to begin.</span></div><div id="fm-list-${windowId}" class="file-manager-list"></div></div>`;
+        const pick = contentEl.querySelector(`#fm-pick-${windowId}`), upload = contentEl.querySelector(`#fm-upload-${windowId}`), newFolder = contentEl.querySelector(`#fm-new-folder-${windowId}`), newFile = contentEl.querySelector(`#fm-new-file-${windowId}`), input = contentEl.querySelector(`#fm-input-${windowId}`), list = contentEl.querySelector(`#fm-list-${windowId}`), status = contentEl.querySelector(`#fm-status-${windowId}`);
+        let root = null, current = null;
+        const back = document.createElement('button'); back.type = 'button'; back.disabled = true; back.title = 'Go to parent folder'; back.innerHTML = '<i class="fa-solid fa-arrow-left"></i> Back'; contentEl.querySelector('.file-manager-toolbar').prepend(back);
+        const goBack = async () => { if (!current) return; const parts = current.split('/').filter(Boolean); parts.pop(); current = parts.length ? `${parts.join('/')}/` : ''; back.disabled = !current; await refreshInternal(); };
+        back.addEventListener('click', goBack);
+        list.addEventListener('dblclick', () => setTimeout(() => { back.disabled = !current; }, 0));
+        const addMoveButtons = () => { list.querySelectorAll('.file-manager-row').forEach(row => { if (row.querySelector('.fm-move')) return; const button = document.createElement('button'); button.className = 'fm-move'; button.title = 'Move'; button.innerHTML = '<i class="fa-solid fa-up-down-left-right"></i>'; button.onclick = async event => { event.stopPropagation(); const name = row.querySelector('.file-manager-name').textContent.trim(); const all = await getAll(); const base = current || ''; const entry = all.find(item => item.path === `${base}${name}` || item.path === `${base}${name}/`); if (!entry) return; const oldPath = entry.path; const destination = await chooseFileManagerPath(entry.name, entry.kind === 'directory' ? oldPath : ''); if (!destination || destination === oldPath) return; const newPath = destination.endsWith('/') && entry.kind === 'directory' ? destination : destination + (entry.kind === 'directory' ? '/' : ''); if (entry.kind === 'directory' && (newPath === oldPath || newPath.startsWith(oldPath))) { await showOSAlert('A folder cannot be moved inside itself.', 'Move Error'); return; } await dbRequest('readwrite', store => { const affected = all.filter(item => item.path === oldPath || (entry.kind === 'directory' && item.path.startsWith(oldPath))); affected.forEach(item => { store.delete(item.path); store.put({...item, name: item.path === oldPath ? entry.name : item.name, path: newPath + item.path.slice(oldPath.length)}); }); }); await refreshInternal(); }; row.appendChild(button); }); };
+        new MutationObserver(addMoveButtons).observe(list, {childList: true});
+        // Internal Simplex OS storage: files are stored as blobs in IndexedDB.
+        pick.style.display = 'none';
+        const dbOpen = () => new Promise((resolve, reject) => { const req = indexedDB.open('simplexos-file-manager', 2); req.onupgradeneeded = () => { const db = req.result; if (!db.objectStoreNames.contains('entries')) db.createObjectStore('entries', {keyPath: 'path'}); }; req.onsuccess = () => resolve(req.result); req.onerror = () => reject(req.error); });
+        const dbRequest = (mode, action) => dbOpen().then(db => new Promise((resolve, reject) => { const tx = db.transaction('entries', mode), result = action(tx.objectStore('entries')); tx.oncomplete = () => resolve(result); tx.onerror = () => reject(tx.error); }));
+        const getAll = () => dbRequest('readonly', store => new Promise((resolve, reject) => { const req = store.getAll(); req.onsuccess = () => resolve(req.result); req.onerror = () => reject(req.error); }));
+        const openManagedFile = (entry) => { const type = entry.data?.type || ''; const extension = entry.name.split('.').pop().toLowerCase(); const image = type.startsWith('image/') || ['png','jpg','jpeg','gif','webp','bmp','svg'].includes(extension); const media = type.startsWith('audio/') || type.startsWith('video/') || ['mp3','wav','ogg','m4a','mp4','webm','mov','avi'].includes(extension); const html = extension === 'html' || extension === 'htm'; const text = type.startsWith('text/') || ['txt','md','json','js','css','csv','xml'].includes(extension); const target = image ? 'ImageViewer' : media ? 'MediaPlayer' : html ? 'NotesApp' : text ? 'TextPad' : null; if (!target) { const url = URL.createObjectURL(entry.data); window.open(url, '_blank', 'noopener'); setTimeout(() => URL.revokeObjectURL(url), 60000); return; } const file = entry.data instanceof File ? entry.data : new File([entry.data], entry.name, {type: type || (html ? 'text/html' : 'application/octet-stream')}); createWindow(target); setTimeout(() => window.dispatchEvent(new CustomEvent('simplexos-open-file', {detail: {target, file, path: entry.path}})), 80); };
+        const refreshInternal = async () => { const all = await getAll(), prefix = current || ''; list.innerHTML = ''; const entries = all.filter(e => e.path.startsWith(prefix) && e.path.slice(prefix.length).split('/').filter(Boolean).length === 1); entries.sort((a,b) => (b.kind === 'directory') - (a.kind === 'directory') || a.name.localeCompare(b.name)); entries.forEach(entry => { const row = document.createElement('div'); row.className = 'file-manager-row'; row.innerHTML = `<span class="file-manager-name"><i class="fa-solid ${entry.kind === 'directory' ? 'fa-folder' : 'fa-file'}"></i> ${entry.name}</span>${entry.kind === 'file' ? '<button class="fm-download" title="Download"><i class="fa-solid fa-download"></i></button>' : ''}<button class="fm-rename" title="Rename"><i class="fa-solid fa-pen"></i></button><button class="fm-delete" title="Delete"><i class="fa-solid fa-trash"></i></button>`; row.querySelector('.fm-download')?.addEventListener('click', () => { const url = URL.createObjectURL(entry.data); const a = document.createElement('a'); a.href = url; a.download = entry.name; a.click(); setTimeout(() => URL.revokeObjectURL(url), 1000); }); row.querySelector('.fm-rename').onclick = async () => { const name = prompt('New name:', entry.name); if (name && name !== entry.name) { const oldPath = entry.path; const newPath = prefix + name + (entry.kind === 'directory' ? '/' : ''); await dbRequest('readwrite', store => { if (entry.kind === 'directory') { const request = store.getAll(); request.onsuccess = () => { request.result.filter(child => child.path === oldPath || child.path.startsWith(oldPath)).forEach(child => { store.delete(child.path); store.put({...child, name: child.path === oldPath ? name : child.name, path: newPath + child.path.slice(oldPath.length)}); }); }; } else { store.delete(oldPath); store.put({...entry, name, path: newPath}); } }); await refreshInternal(); } }; row.querySelector('.fm-delete').onclick = async () => { if (confirm(`Delete ${entry.name}?`)) { await dbRequest('readwrite', store => store.delete(entry.path)); await refreshInternal(); } }; row.querySelector('.file-manager-name').ondblclick = async () => { if (entry.kind === 'directory') { current = entry.path.endsWith('/') ? entry.path : `${entry.path}/`; await refreshInternal(); } else { openManagedFile(entry); } }; list.appendChild(row); }); status.textContent = `${entries.length} item(s) — double-click to open`; };
+        window.addEventListener('simplexos-file-manager-changed', refreshInternal);
+        const initInternal = async () => { current = ''; back.disabled = true; [upload,newFolder,newFile].forEach(b => b.disabled = false); await refreshInternal(); };
+        upload.onclick = () => input.click(); input.onchange = async () => { await dbRequest('readwrite', store => { for (const file of input.files) store.put({path: current + file.name, name: file.name, kind: 'file', data: file}); }); input.value = ''; await refreshInternal(); };
+        newFolder.onclick = async () => { const name = prompt('Folder name:'); if (name) { await dbRequest('readwrite', store => store.put({path: current + name + '/', name, kind: 'directory'})); await refreshInternal(); } };
+        newFile.onclick = async () => { const name = prompt('File name:'); if (name) { await dbRequest('readwrite', store => store.put({path: current + name, name, kind: 'file', data: new Blob([''], {type: 'text/plain'})})); await refreshInternal(); } };
+        initInternal();
+        return;
+        const legacyDbOpen = () => new Promise((resolve, reject) => { const req = indexedDB.open('simplexos-file-manager', 1); req.onupgradeneeded = () => req.result.createObjectStore('handles'); req.onsuccess = () => resolve(req.result); req.onerror = () => reject(req.error); });
+        const saveHandle = async handle => { const db = await legacyDbOpen(); const tx = db.transaction('handles', 'readwrite'); tx.objectStore('handles').put(handle, 'root'); };
+        const loadHandle = async () => { try { const db = await legacyDbOpen(); return await new Promise((resolve, reject) => { const req = db.transaction('handles').objectStore('handles').get('root'); req.onsuccess = () => resolve(req.result); req.onerror = () => reject(req.error); }); } catch { return null; } };
+        const ensurePermission = async handle => { if (!handle) return false; if ((await handle.queryPermission({mode: 'readwrite'})) === 'granted') return true; return (await handle.requestPermission({mode: 'readwrite'})) === 'granted'; };
+        const refresh = async () => { if (!current) return; list.innerHTML = ''; const entries = []; for await (const entry of current.values()) entries.push(entry); entries.sort((a,b) => (b.kind === 'directory') - (a.kind === 'directory') || a.name.localeCompare(b.name)); entries.forEach(entry => { const row = document.createElement('div'); row.className = 'file-manager-row'; row.innerHTML = `<span class="file-manager-name"><i class="fa-solid ${entry.kind === 'directory' ? 'fa-folder' : 'fa-file'}"></i> ${entry.name}</span>${entry.kind === 'file' ? '<button class="fm-download" title="Download"><i class="fa-solid fa-download"></i></button>' : ''}<button class="fm-rename" title="Rename"><i class="fa-solid fa-pen"></i></button><button class="fm-delete" title="Delete"><i class="fa-solid fa-trash"></i></button>`; row.querySelector('.fm-download')?.addEventListener('click', async () => { const file = await entry.getFile(); const url = URL.createObjectURL(file); const link = document.createElement('a'); link.href = url; link.download = file.name; link.click(); setTimeout(() => URL.revokeObjectURL(url), 1000); }); row.querySelector('.fm-rename').onclick = async () => { const name = prompt('New name:', entry.name); if (name && name !== entry.name) { await entry.move(name); await refresh(); } }; row.querySelector('.fm-delete').onclick = async () => { if (confirm(`Delete ${entry.name}?`)) { await current.removeEntry(entry.name, {recursive: entry.kind === 'directory'}); await refresh(); } }; row.querySelector('.file-manager-name').ondblclick = async () => { if (entry.kind === 'directory') { current = entry; await refresh(); } else { const file = await entry.getFile(); const url = URL.createObjectURL(file); window.open(url, '_blank', 'noopener'); } }; list.appendChild(row); }); status.textContent = `${entries.length} item(s) — double-click to open`; };
+        const activate = async handle => { if (!(await ensurePermission(handle))) { status.textContent = 'Permission denied.'; return; } root = handle; current = handle; await saveHandle(handle); [upload,newFolder,newFile].forEach(b => b.disabled = false); await refresh(); };
+        pick.onclick = async () => { if (!window.showDirectoryPicker) { status.textContent = 'This browser does not support folder access.'; return; } try { await activate(await window.showDirectoryPicker({mode: 'readwrite'})); } catch {} };
+        upload.onclick = () => input.click(); input.onchange = async () => { for (const file of input.files) { const writable = await current.getFileHandle(file.name, {create: true}); const stream = await writable.createWritable(); await stream.write(file); await stream.close(); } input.value = ''; await refresh(); };
+        newFolder.onclick = async () => { const name = prompt('Folder name:'); if (name) { await current.getDirectoryHandle(name, {create: true}); await refresh(); } };
+        newFile.onclick = async () => { const name = prompt('File name:'); if (name) { const handle = await current.getFileHandle(name, {create: true}); const stream = await handle.createWritable(); await stream.write(''); await stream.close(); await refresh(); } };
+        loadHandle().then(handle => handle && activate(handle));
+    }
+},
                  'AppInstaller': {
     name: 'App Installer',
     icon: '<i class="fa-solid fa-download"></i>',
@@ -2313,13 +2371,12 @@
             }
 
             function checkLockState() {
-                createLockScreenElements(); createWelcomeScreenElement();
-                const storedHash = localStorage.getItem(PASSWORD_HASH_KEY);
-                const skippedSetup = localStorage.getItem(PASSWORD_SETUP_SKIPPED_KEY) === 'true';
-                lockScreenOverlay.classList.remove('hidden');
-                if (storedHash) { loginScreen.classList.remove('hidden'); passwordSetupScreen.classList.add('hidden'); setTimeout(() => document.getElementById('login-password')?.focus(), 0); }
-                else if (skippedSetup) { unlockOS(); }
-                else { passwordSetupScreen.classList.remove('hidden'); loginScreen.classList.add('hidden'); setTimeout(() => document.getElementById('new-password')?.focus(), 0); }
+                // The lock screen is a demonstration only, so Simplex OS starts directly.
+                // Remove legacy credentials so an older installation cannot block access.
+                localStorage.removeItem(PASSWORD_HASH_KEY);
+                localStorage.removeItem(PASSWORD_SETUP_SKIPPED_KEY);
+                createWelcomeScreenElement();
+                unlockOS();
             }
 
             // --- Custom Context Menu ---
@@ -2586,7 +2643,7 @@
             function minimizeWindow(windowId) { const appWindow = openWindows[windowId]; if (!appWindow || appWindow.isMinimized) return; appWindow.element.classList.add('minimized'); appWindow.element.classList.remove('active'); appWindow.isMinimized = true; const btn = document.getElementById(`taskbar-${windowId}`); if (btn) { btn.classList.add('minimized'); btn.classList.remove('active'); } if (activeWindowId === windowId) activeWindowId = null; }
             function maximizeWindow(windowId) { const appWindow = openWindows[windowId]; if (!appWindow || appWindow.isMaximized) return; appWindow.savedPosition = { left: appWindow.element.style.left, top: appWindow.element.style.top }; appWindow.savedSize = { width: appWindow.element.style.width, height: appWindow.element.style.height }; appWindow.element.classList.add('maximized'); appWindow.element.style.resize = 'none'; appWindow.isMaximized = true; const maxBtn = appWindow.element.querySelector('.maximize-button'); if(maxBtn) { maxBtn.title="Restore"; maxBtn.innerHTML='<i class="fa-solid fa-window-restore"></i>'; } focusWindow(windowId); }
             function restoreWindow(windowId) { const appWindow = openWindows[windowId]; if (!appWindow) return; const wasMinimized = appWindow.isMinimized; const wasMaximized = appWindow.isMaximized; appWindow.element.classList.remove('minimized'); appWindow.isMinimized = false; if (wasMaximized && appWindow.savedPosition && appWindow.savedSize) { appWindow.element.classList.remove('maximized'); appWindow.element.style.left = appWindow.savedPosition.left; appWindow.element.style.top = appWindow.savedPosition.top; appWindow.element.style.width = appWindow.savedSize.width; appWindow.element.style.height = appWindow.savedSize.height; appWindow.element.style.resize = 'both'; appWindow.isMaximized = false; const maxBtn = appWindow.element.querySelector('.maximize-button'); if(maxBtn) { maxBtn.title="Maximize"; maxBtn.innerHTML='<i class="fa-solid fa-window-maximize"></i>'; } } else if (wasMaximized && !wasMinimized) { appWindow.element.classList.remove('maximized'); let restoreW = 450, restoreH = 350; if(appWindow.savedSize) { restoreW = parseInt(appWindow.savedSize.width) || restoreW; restoreH = parseInt(appWindow.savedSize.height) || restoreH; } appWindow.element.style.width = `${restoreW}px`; appWindow.element.style.height = `${restoreH}px`; appWindow.element.style.left = appWindow.savedPosition?.left || '50px'; appWindow.element.style.top = appWindow.savedPosition?.top || '50px'; appWindow.element.style.resize = 'both'; appWindow.isMaximized = false; const maxBtn = appWindow.element.querySelector('.maximize-button'); if(maxBtn) { maxBtn.title="Maximize"; maxBtn.innerHTML='<i class="fa-solid fa-window-maximize"></i>'; } } focusWindow(windowId); }
-            function closeWindow(windowId) { const appWindow = openWindows[windowId]; if (!appWindow) return; if (appWindow.cleanup) { try { appWindow.cleanup(); } catch (err) { console.error(`Cleanup err ${appWindow.appId}:`, err); } } appWindow.element.remove(); removeTaskbarButton(windowId); delete openWindows[windowId]; if (activeWindowId === windowId) activeWindowId = null; adjustTaskbarHeight(); }
+            function closeWindow(windowId) { const appWindow = openWindows[windowId]; if (!appWindow) return; if (appWindow.cleanup) { try { if (appWindow.cleanup() === false) return; } catch (err) { console.error(`Cleanup err ${appWindow.appId}:`, err); } } appWindow.element.remove(); removeTaskbarButton(windowId); delete openWindows[windowId]; if (activeWindowId === windowId) activeWindowId = null; adjustTaskbarHeight(); }
             function createTaskbarButton(windowId, appName, appIconHtml) { const button = document.createElement('button'); button.className = 'taskbar-app-button'; button.id = `taskbar-${windowId}`; button.innerHTML = `${appIconHtml} <span class="taskbar-app-name">${appName.substring(0, 15)}${appName.length > 15 ? '...' : ''}</span>`; button.title = appName; button.addEventListener('click', () => { if (activeWindowId === windowId && !openWindows[windowId]?.isMinimized) minimizeWindow(windowId); else restoreWindow(windowId); }); taskbarApps.appendChild(button); taskbarApps.scrollLeft = taskbarApps.scrollWidth; }
             function removeTaskbarButton(windowId) { const button = document.getElementById(`taskbar-${windowId}`); if (button) button.remove(); }
             function toggleStartMenu() { const isOpening = startMenu.classList.contains('hidden'); startMenu.classList.toggle('hidden'); if (isOpening && activeWindowId && openWindows[activeWindowId]) { openWindows[activeWindowId].element.classList.remove('active'); const btn = document.getElementById(`taskbar-${activeWindowId}`); if(btn) btn.classList.remove('active'); activeWindowId = null; } if (isOpening) { 

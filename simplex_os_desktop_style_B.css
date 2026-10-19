@@ -2299,6 +2299,17 @@ input[type=range].progress-bar { color: var(--accent-primary); /* For some brows
 /* ========================================================================== */
 /* --- APP INSTALLER APP --- */
 /* ========================================================================== */
+.file-manager { height: 100%; display: flex; flex-direction: column; background: var(--bg-secondary); color: var(--text-primary); }
+.file-manager-toolbar { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; padding: 10px; border-bottom: 1px solid var(--border-primary); }
+.file-manager-toolbar button { padding: 7px 10px; border: 0; border-radius: 4px; background: var(--accent-primary); color: white; cursor: pointer; }
+.file-manager-toolbar button:disabled { opacity: .45; cursor: not-allowed; }
+.file-manager-toolbar span { margin-left: auto; font-size: .8em; color: var(--text-secondary); }
+.file-manager-list { flex: 1; overflow: auto; padding: 8px; }
+.file-manager-row { display: flex; align-items: center; gap: 8px; padding: 8px; border-bottom: 1px solid var(--border-primary); }
+.file-manager-row:hover { background: rgba(255,255,255,.08); }
+.file-manager-name { flex: 1; cursor: pointer; }
+.file-manager-name i { width: 20px; color: var(--accent-primary); }
+.file-manager-row button { border: 0; background: transparent; color: var(--text-secondary); cursor: pointer; }
 .app-installer-app {
     display: flex;
     flex-direction: column;
