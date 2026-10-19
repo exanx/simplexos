@@ -1976,6 +1976,21 @@
                 <!-- -----------------------------------------------------------------------------
                 <!-- --- AppInstaller App ---
                 <!-- -----------------------------------------------------------------------------
+                 'LinkToApp': {
+    name: 'Link to App',
+    icon: '<i class="fa-solid fa-link"></i>',
+    isCustom: false,
+    init: (contentEl, windowId) => {
+        contentEl.style.padding = '0';
+        contentEl.innerHTML = `<div class="link-to-app"><div class="link-to-app-form"><h3>Link to App</h3><p>Enter a URL, inspect the preview, and confirm it manually.</p><div class="link-to-app-row"><input id="link-url-${windowId}" type="url" placeholder="https://example.com"><button id="link-show-${windowId}"><i class="fa-solid fa-eye"></i> Show page</button></div><div class="link-to-app-status" id="link-status-${windowId}">The page will always be shown for manual verification.</div><button id="link-download-${windowId}" disabled><i class="fa-solid fa-download"></i> It works — download .js</button></div><iframe id="link-preview-${windowId}" title="Link preview" class="link-to-app-preview" hidden></iframe></div>`;
+        const input = contentEl.querySelector(`#link-url-${windowId}`), show = contentEl.querySelector(`#link-show-${windowId}`), download = contentEl.querySelector(`#link-download-${windowId}`), status = contentEl.querySelector(`#link-status-${windowId}`), preview = contentEl.querySelector(`#link-preview-${windowId}`);
+        let pageTitle = '';
+        const normalize = value => { try { const url = value.trim(); return new URL(/^https?:\/\//i.test(url) ? url : `https://${url}`).href; } catch { return null; } };
+        const downloadApp = url => { const host = new URL(url).hostname, icon = `https://www.google.com/s2/favicons?domain=${encodeURIComponent(host)}&sz=64`, name = pageTitle.trim() || host; const code = `var simplexOS_AppConfig = { name: ${JSON.stringify(name)}, icon: ${JSON.stringify(icon)}, defaultSize: {width: 800, height: 600}, init: function(contentEl) { contentEl.style.padding = '0'; contentEl.innerHTML = '<iframe src=' + ${JSON.stringify(url)} + ' style="width:100%;height:100%;border:0" title="Embedded web page"></iframe>'; } };\n`; const objectUrl = URL.createObjectURL(new Blob([code], {type: 'text/javascript'})); const link = document.createElement('a'); link.href = objectUrl; link.download = `${host.replace(/[^a-z0-9.-]/gi, '_')}-simplex-app.js`; link.click(); URL.revokeObjectURL(objectUrl); };
+        show.addEventListener('click', () => { const url = normalize(input.value); if (!url) { status.textContent = 'Enter a valid http or https URL.'; return; } pageTitle = ''; preview.hidden = false; download.disabled = false; status.textContent = 'Preview shown. Verify it manually before downloading.'; preview.onload = () => { try { pageTitle = preview.contentDocument?.title || ''; } catch {} }; preview.src = url; });
+        download.addEventListener('click', () => { const url = normalize(input.value); if (!url) return; downloadApp(url); status.textContent = 'The installable .js file was downloaded.'; });
+    }
+},
                  'AppInstaller': {
     name: 'App Installer',
     icon: '<i class="fa-solid fa-download"></i>',
@@ -2313,13 +2328,12 @@
             }
 
             function checkLockState() {
-                createLockScreenElements(); createWelcomeScreenElement();
-                const storedHash = localStorage.getItem(PASSWORD_HASH_KEY);
-                const skippedSetup = localStorage.getItem(PASSWORD_SETUP_SKIPPED_KEY) === 'true';
-                lockScreenOverlay.classList.remove('hidden');
-                if (storedHash) { loginScreen.classList.remove('hidden'); passwordSetupScreen.classList.add('hidden'); setTimeout(() => document.getElementById('login-password')?.focus(), 0); }
-                else if (skippedSetup) { unlockOS(); }
-                else { passwordSetupScreen.classList.remove('hidden'); loginScreen.classList.add('hidden'); setTimeout(() => document.getElementById('new-password')?.focus(), 0); }
+                // The lock screen is a demonstration only, so Simplex OS starts directly.
+                // Remove legacy credentials so an older installation cannot block access.
+                localStorage.removeItem(PASSWORD_HASH_KEY);
+                localStorage.removeItem(PASSWORD_SETUP_SKIPPED_KEY);
+                createWelcomeScreenElement();
+                unlockOS();
             }
 
             // --- Custom Context Menu ---
